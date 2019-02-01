@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gojektech/weaver"
+	"github.com/gojektech/weaver/pkg/matcher"
 	"github.com/gojektech/weaver/pkg/shard"
 	"github.com/pkg/errors"
 )
@@ -27,10 +28,8 @@ type EndpointConfig struct {
 	ShardConfig json.RawMessage `json:"shard_config"`
 }
 
-type shardKeyFunc func(*http.Request) (string, error)
-
 func (endpointConfig *EndpointConfig) genShardKeyFunc() (shardKeyFunc, error) {
-	matcherFunc, found := matcherMux[endpointConfig.Matcher]
+	matcherFunc, found := matcher.New(endpointConfig.Matcher)
 	if !found {
 		return nil, errors.WithStack(fmt.Errorf("failed to find a matcherMux for: %s", endpointConfig.Matcher))
 	}
@@ -77,3 +76,5 @@ func (endpoint *Endpoint) Shard(request *http.Request) (*weaver.Backend, error) 
 
 	return endpoint.sharder.Shard(shardKey)
 }
+
+type shardKeyFunc func(*http.Request) (string, error)

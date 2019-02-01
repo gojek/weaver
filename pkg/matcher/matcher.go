@@ -1,4 +1,4 @@
-package server
+package matcher
 
 import (
 	"bytes"
@@ -14,9 +14,14 @@ import (
 	"github.com/savaki/jq"
 )
 
-type matcherFunc func(request *http.Request, shardExpr string) (shardKey string, err error)
+func New(matcherName string) (MatcherFunc, bool) {
+	mf, found := matcherMux[matcherName]
+	return mf, found
+}
 
-var matcherMux = map[string]matcherFunc{
+type MatcherFunc func(request *http.Request, shardExpr string) (shardKey string, err error)
+
+var matcherMux = map[string]MatcherFunc{
 	"header": func(req *http.Request, expr string) (string, error) {
 		return req.Header.Get(expr), nil
 	},
