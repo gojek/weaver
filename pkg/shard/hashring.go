@@ -6,9 +6,8 @@ import (
 	"regexp"
 	"strconv"
 
-	"github.com/gojektech/weaver/internal/domain"
-
 	"github.com/gojekfarm/hashring"
+	"github.com/gojektech/weaver/internal/domain"
 	"github.com/pkg/errors"
 )
 

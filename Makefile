@@ -12,9 +12,12 @@ setup:
 
 compile:
 	mkdir -p out/
-	go build -o $(APP_EXECUTABLE) -ldflags "-X main.Build=$(BUILD_DATE) -X main.Commit=$(COMMIT_HASH) -s -w"
+	go build -o $(APP_EXECUTABLE) -ldflags "-X main.BuildDate=$(BUILD_DATE) -X main.Commit=$(COMMIT_HASH) -s -w"
 
-build: compile fmt vet lint
+build: deps compile fmt vet lint
+
+deps:
+	go mod tidy -v
 
 install:
 	go install ./...

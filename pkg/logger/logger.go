@@ -6,7 +6,6 @@ import (
 
 	"github.com/gojektech/weaver/internal/config"
 	"github.com/gojektech/weaver/pkg/util"
-
 	"github.com/sirupsen/logrus"
 )
 

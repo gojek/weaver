@@ -7,7 +7,6 @@ import (
 
 	"github.com/gojektech/weaver/internal/domain"
 	"github.com/gojektech/weaver/pkg/shard"
-
 	"github.com/pkg/errors"
 )
 

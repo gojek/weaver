@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/gojektech/weaver/internal/config"
-
 	newrelic "github.com/newrelic/go-agent"
 )
 

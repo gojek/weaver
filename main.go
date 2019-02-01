@@ -9,18 +9,28 @@ import (
 	"syscall"
 	"time"
 
+	raven "github.com/getsentry/raven-go"
 	"github.com/gojektech/weaver/internal/config"
 	"github.com/gojektech/weaver/internal/server"
 	"github.com/gojektech/weaver/pkg/instrumentation"
 	"github.com/gojektech/weaver/pkg/logger"
-
-	raven "github.com/getsentry/raven-go"
 	cli "gopkg.in/urfave/cli.v1"
 )
 
-func version(_ *cli.Context) error {
-	fmt.Println(GenVersion())
-	return nil
+func main() {
+	app := cli.NewApp()
+	app.Name = "weaver"
+	app.Version = fmt.Sprintf("%s built on %s (commit: %s)", Version, BuildDate, Commit)
+	app.Description = "A Layer-7 Load Balancer with Dynamic Sharding Strategies"
+	app.Commands = []cli.Command{
+		{
+			Name:        "server",
+			Description: "Start weaver server",
+			Action:      startWeaver,
+		},
+	}
+
+	app.Run(os.Args)
 }
 
 func startWeaver(_ *cli.Context) error {
@@ -53,22 +63,9 @@ func startWeaver(_ *cli.Context) error {
 	return nil
 }
 
-func main() {
-	app := cli.NewApp()
-	app.Name = "server"
-	app.Description = "A Layer-7 Load Balancer with Dynamic Sharding Strategies"
-	app.Commands = []cli.Command{
-		{
-			Name:        "version",
-			Description: "Prints server's version",
-			Action:      version,
-		},
-		{
-			Name:        "server",
-			Description: "Start weaver server",
-			Action:      startWeaver,
-		},
-	}
-
-	app.Run(os.Args)
-}
+// Build information (will be injected during build)
+var (
+	Version   = "1.0.0"
+	Commit    = "n/a"
+	BuildDate = "n/a"
+)

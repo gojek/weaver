@@ -7,6 +7,7 @@ require (
 	github.com/coreos/go-semver v0.2.0 // indirect
 	github.com/coreos/go-systemd v0.0.0-20181031085051-9002847aa142 // indirect
 	github.com/coreos/pkg v0.0.0-20180928190104-399ea9e2e55f // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/getsentry/raven-go v0.0.0-20161115135411-3f7439d3e74d
 	github.com/ghodss/yaml v1.0.0 // indirect
@@ -21,6 +22,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway v1.7.0 // indirect
 	github.com/hashicorp/hcl v0.0.0-20170217164738-630949a3c5fa // indirect
 	github.com/jonboulle/clockwork v0.1.0 // indirect
+	github.com/kr/pretty v0.1.0 // indirect
 	github.com/magiconair/properties v0.0.0-20170113111004-b3b15ef068fd // indirect
 	github.com/mailru/easyjson v0.0.0-20180823135443-60711f1a8329 // indirect
 	github.com/mitchellh/mapstructure v0.0.0-20170125051937-db1efb556f84 // indirect
@@ -31,11 +33,11 @@ require (
 	github.com/pelletier/go-toml v0.0.0-20170227222904-361678322880 // indirect
 	github.com/philhofer/fwd v1.0.0 // indirect
 	github.com/pkg/errors v0.8.0
+	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/pquerna/ffjson v0.0.0-20181028064349-e517b90714f7 // indirect
 	github.com/prometheus/client_golang v0.9.2 // indirect
 	github.com/prometheus/client_model v0.0.0-20190129233127-fd36f4220a90 // indirect
 	github.com/savaki/jq v0.0.0-20161209013833-0e6baecebbf8
-	github.com/securego/gosec v0.0.0-20190128083818-04ce7baf6c55 // indirect
 	github.com/sirupsen/logrus v1.0.3
 	github.com/soheilhy/cmux v0.1.4 // indirect
 	github.com/spaolacci/murmur3 v0.0.0-20170819071325-9f5d223c6079 // indirect
@@ -58,6 +60,7 @@ require (
 	google.golang.org/grpc v1.18.0 // indirect
 	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
 	gopkg.in/alexcesaro/statsd.v2 v2.0.0
+	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect
 	gopkg.in/urfave/cli.v1 v1.20.0
 )

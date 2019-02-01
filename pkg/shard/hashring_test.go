@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/gojektech/weaver/pkg/shard"
-
 	"github.com/stretchr/testify/assert"
 )
 

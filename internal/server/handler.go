@@ -7,7 +7,6 @@ import (
 	"github.com/gojektech/weaver/internal/httperror"
 	"github.com/gojektech/weaver/pkg/instrumentation"
 	"github.com/gojektech/weaver/pkg/logger"
-
 	newrelic "github.com/newrelic/go-agent"
 )
 

@@ -5,11 +5,10 @@ import (
 	"fmt"
 	"net/http"
 
+	raven "github.com/getsentry/raven-go"
 	"github.com/gojektech/weaver/internal/httperror"
 	"github.com/gojektech/weaver/pkg/instrumentation"
 	"github.com/gojektech/weaver/pkg/logger"
-
-	raven "github.com/getsentry/raven-go"
 )
 
 func Recover(next http.Handler) http.Handler {

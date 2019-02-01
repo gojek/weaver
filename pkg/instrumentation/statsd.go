@@ -2,13 +2,11 @@ package instrumentation
 
 import (
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/gojektech/weaver/internal/config"
 	"github.com/gojektech/weaver/pkg/logger"
-
-	"net/http"
-
 	statsd "gopkg.in/alexcesaro/statsd.v2"
 )
 

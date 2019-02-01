@@ -3,7 +3,6 @@ package server
 import (
 	"context"
 	"log"
-
 	"net/http"
 
 	"github.com/gojektech/weaver/internal/config"

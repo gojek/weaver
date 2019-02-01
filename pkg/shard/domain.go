@@ -6,7 +6,6 @@ import (
 
 	"github.com/gojektech/weaver/internal/config"
 	"github.com/gojektech/weaver/internal/domain"
-
 	"github.com/pkg/errors"
 )
 
