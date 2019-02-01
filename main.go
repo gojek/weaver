@@ -3,6 +3,12 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
 	raven "github.com/getsentry/raven-go"
 	"github.com/gojektech/weaver/internal/config"
 	"github.com/gojektech/weaver/internal/etcd"
@@ -10,11 +16,6 @@ import (
 	"github.com/gojektech/weaver/pkg/instrumentation"
 	"github.com/gojektech/weaver/pkg/logger"
 	cli "gopkg.in/urfave/cli.v1"
-	"log"
-	"os"
-	"os/signal"
-	"syscall"
-	"time"
 )
 
 func main() {

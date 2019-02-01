@@ -4,10 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"github.com/gojektech/weaver/internal/server"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/gojektech/weaver/internal/server"
 
 	etcd "github.com/coreos/etcd/client"
 	"github.com/gojektech/weaver/internal/config"
