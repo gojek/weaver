@@ -1,12 +1,77 @@
-# Binaries for programs and plugins
-*.exe
+# Windows Ignores
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+*.rdb
+# macOS Ignores
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Text Editor Ignores
+*~
+\#*\#
+.\#*
+*.swp
+[._]*.un~
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+tags
+TAGS
+*.sublime-workspace
+*.sublime-project
+
+# IDE Ignores
+/.idea
+*.iml
+.vscode/
+
+# Go Ignores
+.exe
 *.exe~
 *.dll
 *.so
 *.dylib
-
-# Test binary, build with `go test -c`
 *.test
-
-# Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+# Project Ignores
+dev/
+tmp/
+temp/
+out/
+build/
+vendor/
+.vendor-new/
+
+/**/application.yml
+expt/
+
+cmd/debug
+api/*.*

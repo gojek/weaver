@@ -1,0 +1,42 @@
+version: '2'
+
+services:
+  dev_weaver_statsd:
+    image: gojektech/statsd:0.7.2
+    hostname: dev-weaver-statsd
+    ports:
+      - "18124:8124"
+      - "18125:8125"
+      - "18126:8126"
+    networks:
+      - weaver_net
+
+  dev_weaver_etcd:
+    image: quay.io/coreos/etcd:v2.3.8
+    hostname: dev-weaver-etcd
+    entrypoint: ["/etcd"]
+    command: [
+        "-name",
+        "etcd0",
+        "-advertise-client-urls",
+        "http://localhost:2379,http://localhost:4001",
+        "-listen-client-urls",
+        "http://0.0.0.0:2379,http://0.0.0.0:4001",
+        "-initial-advertise-peer-urls",
+        "http://localhost:2380",
+        "-listen-peer-urls",
+        "http://0.0.0.0:2380",
+        "-initial-cluster-token",
+        "etcd-cluster-1",
+        "-initial-cluster",
+        "etcd0=http://localhost:2380",
+        "-initial-cluster-state",
+        "new"
+      ]
+    ports:
+      - "12379:2379"
+    networks:
+      - weaver_net
+
+networks:
+  weaver_net:
