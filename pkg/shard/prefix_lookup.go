@@ -26,7 +26,7 @@ func (plg prefixLookupConfig) Validate() error {
 	return nil
 }
 
-func NewPrefixLookupStrategy(data json.RawMessage) (Sharder, error) {
+func NewPrefixLookupStrategy(data json.RawMessage) (weaver.Sharder, error) {
 	prefixLookupConfig := &prefixLookupConfig{}
 
 	if err := json.Unmarshal(data, &prefixLookupConfig); err != nil {

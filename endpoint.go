@@ -1,24 +1,13 @@
-package server
+package weaver
 
 import (
 	"encoding/json"
 	"fmt"
 	"net/http"
 
-	"github.com/gojektech/weaver"
 	"github.com/gojektech/weaver/pkg/matcher"
-	"github.com/gojektech/weaver/pkg/shard"
 	"github.com/pkg/errors"
 )
-
-var shardFuncTable = map[string]SharderGenerator{
-	"lookup":        shard.NewLookupStrategy,
-	"prefix-lookup": shard.NewPrefixLookupStrategy,
-	"none":          shard.NewNoStrategy,
-	"modulo":        shard.NewModuloStrategy,
-	"hashring":      shard.NewHashRingStrategy,
-	"s2":            shard.NewS2Strategy,
-}
 
 // EndpointConfig - Defines a config for external service
 type EndpointConfig struct {
@@ -39,22 +28,14 @@ func (endpointConfig *EndpointConfig) genShardKeyFunc() (shardKeyFunc, error) {
 	}, nil
 }
 
-type SharderGenerator func(json.RawMessage) (shard.Sharder, error)
-
 type Endpoint struct {
-	sharder      shard.Sharder
+	sharder      Sharder
 	shardKeyFunc shardKeyFunc
 }
 
-func NewEndpoint(endpointConfig *EndpointConfig) (*Endpoint, error) {
-	shardFunc, found := shardFuncTable[endpointConfig.ShardFunc]
-	if !found {
-		return nil, errors.WithStack(fmt.Errorf("failed to find ShardFunc for: %s", endpointConfig.ShardFunc))
-	}
-
-	sharder, err := shardFunc(endpointConfig.ShardConfig)
-	if err != nil {
-		return nil, errors.Wrapf(err, "failed to get sharder for %s", endpointConfig.ShardExpr)
+func NewEndpoint(endpointConfig *EndpointConfig, sharder Sharder) (*Endpoint, error) {
+	if sharder == nil {
+		return nil, errors.New("nil sharder passed in")
 	}
 
 	shardKeyFunc, err := endpointConfig.genShardKeyFunc()
@@ -68,7 +49,7 @@ func NewEndpoint(endpointConfig *EndpointConfig) (*Endpoint, error) {
 	}, nil
 }
 
-func (endpoint *Endpoint) Shard(request *http.Request) (*weaver.Backend, error) {
+func (endpoint *Endpoint) Shard(request *http.Request) (*Backend, error) {
 	shardKey, err := endpoint.shardKeyFunc(request)
 	if err != nil {
 		return nil, errors.Wrapf(err, "failed to find shardKey")

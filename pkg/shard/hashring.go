@@ -11,7 +11,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func NewHashRingStrategy(data json.RawMessage) (Sharder, error) {
+func NewHashRingStrategy(data json.RawMessage) (weaver.Sharder, error) {
 	cfg := HashRingStrategyConfig{}
 	if err := json.Unmarshal(data, &cfg); err != nil {
 		return nil, err

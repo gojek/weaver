@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"github.com/gojektech/weaver"
+	"github.com/gojektech/weaver/pkg/shard"
 	"net/http/httptest"
 	"testing"
 
@@ -62,7 +64,7 @@ func (rs *RouterSuite) TestRouteReturnsACL() {
 	acl := &ACL{
 		ID:        "svc-01",
 		Criterion: "Method(`GET`) && PathRegexp(`/(GF-|R-).*`)",
-		EndpointConfig: &EndpointConfig{
+		EndpointConfig: &weaver.EndpointConfig{
 			ShardConfig: json.RawMessage(`{
 				"GF-": {
 					"backend_name": "foobar",
@@ -80,8 +82,10 @@ func (rs *RouterSuite) TestRouteReturnsACL() {
 		},
 	}
 
-	var err error
-	acl.Endpoint, err = NewEndpoint(acl.EndpointConfig)
+	sharder, err := shard.New(acl.EndpointConfig.ShardFunc, acl.EndpointConfig.ShardConfig)
+	require.NoError(rs.T(), err, "should not have failed to init a sharder")
+
+	acl.Endpoint, err = weaver.NewEndpoint(acl.EndpointConfig, sharder)
 	require.NoError(rs.T(), err, "should not have failed to set endpoint")
 
 	rs.rtr.UpsertRoute(acl.Criterion, acl)
@@ -132,3 +136,4 @@ func (rs *RouterSuite) TestWatchRouteUpdatesCallsWatchRoutesOfLoader() {
 
 	routeLoader.AssertExpectations(rs.T())
 }
+

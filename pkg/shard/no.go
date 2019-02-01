@@ -8,7 +8,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func NewNoStrategy(data json.RawMessage) (Sharder, error) {
+func NewNoStrategy(data json.RawMessage) (weaver.Sharder, error) {
 	cfg := NoStrategyConfig{}
 	if err := json.Unmarshal(data, &cfg); err != nil {
 		return nil, err

@@ -6,7 +6,7 @@ import (
 	"github.com/gojektech/weaver"
 )
 
-func NewLookupStrategy(data json.RawMessage) (Sharder, error) {
+func NewLookupStrategy(data json.RawMessage) (weaver.Sharder, error) {
 	shardConfig := map[string]BackendDefinition{}
 	if err := json.Unmarshal(data, &shardConfig); err != nil {
 		return nil, err

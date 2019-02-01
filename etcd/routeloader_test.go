@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"github.com/gojektech/weaver"
 	"reflect"
 	"testing"
 	"time"
@@ -46,7 +47,7 @@ func (es *ETCDRouteLoaderSuite) TestPutACL() {
 	aclPut := &server.ACL{
 		ID:        "svc-01",
 		Criterion: "Method(`GET`) && Path(`/ping`)",
-		EndpointConfig: &server.EndpointConfig{
+		EndpointConfig: &weaver.EndpointConfig{
 			ShardFunc: "lookup",
 			Matcher:   "path",
 			ShardExpr: "*",
@@ -76,7 +77,7 @@ func (es *ETCDRouteLoaderSuite) TestBootstrapRoutes() {
 	aclPut := &server.ACL{
 		ID:        "svc-01",
 		Criterion: "Method(`GET`) && Path(`/ping`)",
-		EndpointConfig: &server.EndpointConfig{
+		EndpointConfig: &weaver.EndpointConfig{
 			ShardFunc:   "lookup",
 			Matcher:     "path",
 			ShardExpr:   "*",
@@ -97,7 +98,7 @@ func (es *ETCDRouteLoaderSuite) TestBootstrapRoutesSucceedWhenARouteUpsertFails(
 	aclPut := &server.ACL{
 		ID:        "svc-01",
 		Criterion: "Method(`GET`) && Path(`/ping`)",
-		EndpointConfig: &server.EndpointConfig{
+		EndpointConfig: &weaver.EndpointConfig{
 			ShardFunc: "lookup",
 			Matcher:   "path",
 			ShardExpr: "*",
@@ -201,7 +202,7 @@ func newTestACL(matcher string) *server.ACL {
 	return &server.ACL{
 		ID:        "svc-01",
 		Criterion: "Method(`GET`) && Path(`/ping`)",
-		EndpointConfig: &server.EndpointConfig{
+		EndpointConfig: &weaver.EndpointConfig{
 			ShardFunc: "lookup",
 			Matcher:   matcher,
 			ShardExpr: "*",

@@ -8,7 +8,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func NewModuloStrategy(data json.RawMessage) (Sharder, error) {
+func NewModuloStrategy(data json.RawMessage) (weaver.Sharder, error) {
 	shardConfig := map[string]BackendDefinition{}
 	if err := json.Unmarshal(data, &shardConfig); err != nil {
 		return nil, err

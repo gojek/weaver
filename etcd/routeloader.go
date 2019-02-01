@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/gojektech/weaver"
+	"github.com/gojektech/weaver/pkg/shard"
 	"sort"
 
 	etcd "github.com/coreos/etcd/client"
@@ -55,7 +57,12 @@ func (routeLoader *ETCDRouteLoader) GetACL(key ACLKey) (*server.ACL, error) {
 		return nil, err
 	}
 
-	acl.Endpoint, err = server.NewEndpoint(acl.EndpointConfig)
+	sharder, err := shard.New(acl.EndpointConfig.ShardFunc, acl.EndpointConfig.ShardConfig)
+	if err != nil {
+		return nil, errors.Wrapf(err, "failed to initialize sharder '%s'", acl.EndpointConfig.ShardFunc)
+	}
+
+	acl.Endpoint, err = weaver.NewEndpoint(acl.EndpointConfig, sharder)
 	if err != nil {
 		return nil, errors.Wrapf(err, "failed to create a new Endpoint for key: %s", key)
 	}

@@ -15,7 +15,7 @@ var (
 	defaultBackendS2id = "default"
 )
 
-func NewS2Strategy(data json.RawMessage) (Sharder, error) {
+func NewS2Strategy(data json.RawMessage) (weaver.Sharder, error) {
 	cfg := S2StrategyConfig{}
 	if err := json.Unmarshal(data, &cfg); err != nil {
 		return nil, err

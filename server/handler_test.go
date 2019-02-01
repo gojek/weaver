@@ -4,10 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/gojektech/weaver/pkg/shard"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
+	"github.com/gojektech/weaver"
 	"github.com/gojektech/weaver/pkg/logger"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -43,7 +45,7 @@ func (ps *ProxySuite) TestProxyHandlerOnSuccessfulRouting() {
 	acl := &ACL{
 		ID:        "svc-01",
 		Criterion: "Method(`GET`) && PathRegexp(`/(GF-|R-).*`)",
-		EndpointConfig: &EndpointConfig{
+		EndpointConfig: &weaver.EndpointConfig{
 			Matcher:   "path",
 			ShardExpr: "/(GF-|R-|).*",
 			ShardFunc: "lookup",
@@ -61,8 +63,10 @@ func (ps *ProxySuite) TestProxyHandlerOnSuccessfulRouting() {
 		},
 	}
 
-	var err error
-	acl.Endpoint, err = NewEndpoint(acl.EndpointConfig)
+	sharder, err := shard.New(acl.EndpointConfig.ShardFunc, acl.EndpointConfig.ShardConfig)
+	require.NoError(ps.T(), err, "should not have failed to init a sharder")
+
+	acl.Endpoint, err = weaver.NewEndpoint(acl.EndpointConfig, sharder)
 	require.NoError(ps.T(), err, "should not have failed to set endpoint")
 
 	_ = ps.rtr.UpsertRoute(acl.Criterion, acl)
@@ -87,7 +91,7 @@ func (ps *ProxySuite) TestProxyHandlerOnBodyBasedMatcherWithModuloSharding() {
 	acl := &ACL{
 		ID:        "svc-01",
 		Criterion: "Method(`GET`) && PathRegexp(`/drivers`)",
-		EndpointConfig: &EndpointConfig{
+		EndpointConfig: &weaver.EndpointConfig{
 			Matcher:   "body",
 			ShardExpr: ".drivers.id",
 			ShardFunc: "modulo",
@@ -105,8 +109,10 @@ func (ps *ProxySuite) TestProxyHandlerOnBodyBasedMatcherWithModuloSharding() {
 		},
 	}
 
-	var err error
-	acl.Endpoint, err = NewEndpoint(acl.EndpointConfig)
+	sharder, err := shard.New(acl.EndpointConfig.ShardFunc, acl.EndpointConfig.ShardConfig)
+	require.NoError(ps.T(), err, "should not have failed to init a sharder")
+
+	acl.Endpoint, err = weaver.NewEndpoint(acl.EndpointConfig, sharder)
 	require.NoError(ps.T(), err, "should not have failed to set endpoint")
 
 	_ = ps.rtr.UpsertRoute(acl.Criterion, acl)
@@ -132,7 +138,7 @@ func (ps *ProxySuite) TestProxyHandlerOnPathBasedMatcherWithModuloSharding() {
 	acl := &ACL{
 		ID:        "svc-01",
 		Criterion: "Method(`GET`) && PathRegexp(`/drivers`)",
-		EndpointConfig: &EndpointConfig{
+		EndpointConfig: &weaver.EndpointConfig{
 			Matcher:   "path",
 			ShardExpr: `/drivers/(\d+)`,
 			ShardFunc: "modulo",
@@ -150,8 +156,10 @@ func (ps *ProxySuite) TestProxyHandlerOnPathBasedMatcherWithModuloSharding() {
 		},
 	}
 
-	var err error
-	acl.Endpoint, err = NewEndpoint(acl.EndpointConfig)
+	sharder, err := shard.New(acl.EndpointConfig.ShardFunc, acl.EndpointConfig.ShardConfig)
+	require.NoError(ps.T(), err, "should not have failed to init a sharder")
+
+	acl.Endpoint, err = weaver.NewEndpoint(acl.EndpointConfig, sharder)
 	require.NoError(ps.T(), err, "should not have failed to set endpoint")
 
 	_ = ps.rtr.UpsertRoute(acl.Criterion, acl)
@@ -182,7 +190,7 @@ func (ps *ProxySuite) TestProxyHandlerOnMissingBackend() {
 	acl := &ACL{
 		ID:        "svc-01",
 		Criterion: "Method(`GET`) && PathRegexp(`/(GF-|R-).*`)",
-		EndpointConfig: &EndpointConfig{
+		EndpointConfig: &weaver.EndpointConfig{
 			Matcher:   "path",
 			ShardExpr: "/(GF-|R-|).*",
 			ShardFunc: "lookup",
@@ -196,8 +204,10 @@ func (ps *ProxySuite) TestProxyHandlerOnMissingBackend() {
 		},
 	}
 
-	var err error
-	acl.Endpoint, err = NewEndpoint(acl.EndpointConfig)
+	sharder, err := shard.New(acl.EndpointConfig.ShardFunc, acl.EndpointConfig.ShardConfig)
+	require.NoError(ps.T(), err, "should not have failed to init a sharder")
+
+	acl.Endpoint, err = weaver.NewEndpoint(acl.EndpointConfig, sharder)
 	require.NoError(ps.T(), err, "should not have failed to set endpoint")
 
 	_ = ps.rtr.UpsertRoute(acl.Criterion, acl)
