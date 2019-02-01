@@ -1,9 +1,10 @@
-package server
+package etcd
 
 import (
 	"context"
 	"encoding/json"
 	"errors"
+	"github.com/gojektech/weaver/internal/server"
 	"reflect"
 	"testing"
 	"time"
@@ -29,7 +30,7 @@ func (es *ETCDRouteLoaderSuite) SetupTest() {
 
 	var err error
 
-	es.ng, err = NewETCDRouteLoader()
+	es.ng, err = NewRouteLoader()
 	assert.NoError(es.T(), err)
 }
 
@@ -42,10 +43,10 @@ func TestETCDRouteLoaderSuite(tst *testing.T) {
 }
 
 func (es *ETCDRouteLoaderSuite) TestPutACL() {
-	aclPut := &ACL{
+	aclPut := &server.ACL{
 		ID:        "svc-01",
 		Criterion: "Method(`GET`) && Path(`/ping`)",
-		EndpointConfig: &EndpointConfig{
+		EndpointConfig: &server.EndpointConfig{
 			ShardFunc: "lookup",
 			Matcher:   "path",
 			ShardExpr: "*",
@@ -72,10 +73,10 @@ func (es *ETCDRouteLoaderSuite) TestPutACL() {
 }
 
 func (es *ETCDRouteLoaderSuite) TestBootstrapRoutes() {
-	aclPut := &ACL{
+	aclPut := &server.ACL{
 		ID:        "svc-01",
 		Criterion: "Method(`GET`) && Path(`/ping`)",
-		EndpointConfig: &EndpointConfig{
+		EndpointConfig: &server.EndpointConfig{
 			ShardFunc:   "lookup",
 			Matcher:     "path",
 			ShardExpr:   "*",
@@ -85,7 +86,7 @@ func (es *ETCDRouteLoaderSuite) TestBootstrapRoutes() {
 	key, err := es.ng.PutACL(aclPut)
 	assert.NoError(es.T(), err, "failed to PUT %s", aclPut)
 
-	aclsChan := make(chan *ACL, 1)
+	aclsChan := make(chan *server.ACL, 1)
 	es.ng.BootstrapRoutes(context.Background(), genRouteProcessorMock(aclsChan))
 
 	deepEqual(es.T(), aclPut, <-aclsChan)
@@ -93,10 +94,10 @@ func (es *ETCDRouteLoaderSuite) TestBootstrapRoutes() {
 }
 
 func (es *ETCDRouteLoaderSuite) TestBootstrapRoutesSucceedWhenARouteUpsertFails() {
-	aclPut := &ACL{
+	aclPut := &server.ACL{
 		ID:        "svc-01",
 		Criterion: "Method(`GET`) && Path(`/ping`)",
-		EndpointConfig: &EndpointConfig{
+		EndpointConfig: &server.EndpointConfig{
 			ShardFunc: "lookup",
 			Matcher:   "path",
 			ShardExpr: "*",
@@ -142,7 +143,7 @@ func (es *ETCDRouteLoaderSuite) TestBootstrapRoutesSucceedWhenARouteHasInvalidDa
 func (es *ETCDRouteLoaderSuite) TestWatchRoutesUpsertRoutesWhenRoutesSet() {
 	newACL := newTestACL("path")
 
-	aclsUpserted := make(chan *ACL, 1)
+	aclsUpserted := make(chan *server.ACL, 1)
 
 	watchCtx, cancelWatch := context.WithCancel(context.Background())
 	defer cancelWatch()
@@ -162,7 +163,7 @@ func (es *ETCDRouteLoaderSuite) TestWatchRoutesUpsertRoutesWhenRoutesUpdated() {
 	updatedACL := newTestACL("header")
 
 	_, err := es.ng.PutACL(newACL)
-	aclsUpserted := make(chan *ACL, 1)
+	aclsUpserted := make(chan *server.ACL, 1)
 	watchCtx, cancelWatch := context.WithCancel(context.Background())
 	defer cancelWatch()
 
@@ -182,7 +183,7 @@ func (es *ETCDRouteLoaderSuite) TestWatchRoutesDeleteRouteWhenARouteIsDeleted() 
 	key, err := es.ng.PutACL(newACL)
 	require.NoError(es.T(), err, "fail to PUT ACL %+v", newACL)
 
-	aclsDeleted := make(chan *ACL, 1)
+	aclsDeleted := make(chan *server.ACL, 1)
 
 	watchCtx, cancelWatch := context.WithCancel(context.Background())
 	defer cancelWatch()
@@ -196,11 +197,11 @@ func (es *ETCDRouteLoaderSuite) TestWatchRoutesDeleteRouteWhenARouteIsDeleted() 
 	deepEqual(es.T(), newACL, <-aclsDeleted)
 }
 
-func newTestACL(matcher string) *ACL {
-	return &ACL{
+func newTestACL(matcher string) *server.ACL {
+	return &server.ACL{
 		ID:        "svc-01",
 		Criterion: "Method(`GET`) && Path(`/ping`)",
-		EndpointConfig: &EndpointConfig{
+		EndpointConfig: &server.EndpointConfig{
 			ShardFunc: "lookup",
 			Matcher:   matcher,
 			ShardExpr: "*",
@@ -219,14 +220,14 @@ func newTestACL(matcher string) *ACL {
 	}
 }
 
-func genRouteProcessorMock(c chan *ACL) func(*ACL) error {
-	return func(acl *ACL) error {
+func genRouteProcessorMock(c chan *server.ACL) func(*server.ACL) error {
+	return func(acl *server.ACL) error {
 		c <- acl
 		return nil
 	}
 }
 
-func deepEqual(t *testing.T, expected *ACL, actual *ACL) {
+func deepEqual(t *testing.T, expected *server.ACL, actual *server.ACL) {
 	assert.Equal(t, expected.ID, actual.ID)
 	assert.Equal(t, expected.Criterion, actual.Criterion)
 	assertEqualJSON(t, expected.EndpointConfig.ShardConfig, actual.EndpointConfig.ShardConfig)
@@ -247,10 +248,10 @@ func assertEqualJSON(t *testing.T, json1, json2 json.RawMessage) {
 	assert.True(t, reflect.DeepEqual(jsonVal1, jsonVal2))
 }
 
-func failingUpsertRouteFunc(acl *ACL) error {
+func failingUpsertRouteFunc(acl *server.ACL) error {
 	return errors.New("error")
 }
 
-func successUpsertRouteFunc(acl *ACL) error {
+func successUpsertRouteFunc(acl *server.ACL) error {
 	return nil
 }

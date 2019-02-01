@@ -3,18 +3,18 @@ package main
 import (
 	"context"
 	"fmt"
+	raven "github.com/getsentry/raven-go"
+	"github.com/gojektech/weaver/internal/config"
+	"github.com/gojektech/weaver/internal/etcd"
+	"github.com/gojektech/weaver/internal/server"
+	"github.com/gojektech/weaver/pkg/instrumentation"
+	"github.com/gojektech/weaver/pkg/logger"
+	cli "gopkg.in/urfave/cli.v1"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
-
-	raven "github.com/getsentry/raven-go"
-	"github.com/gojektech/weaver/internal/config"
-	"github.com/gojektech/weaver/internal/server"
-	"github.com/gojektech/weaver/pkg/instrumentation"
-	"github.com/gojektech/weaver/pkg/logger"
-	cli "gopkg.in/urfave/cli.v1"
 )
 
 func main() {
@@ -51,12 +51,17 @@ func startWeaver(_ *cli.Context) error {
 	instrumentation.InitNewRelic()
 	defer instrumentation.ShutdownNewRelic()
 
-	go server.StartServer()
+	routeLoader, err := etcd.NewRouteLoader()
+	if err != nil {
+		log.Printf("StartServer: failed to initialise etcd route loader: %s", err)
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), (1 * time.Second))
+	go server.StartServer(ctx, routeLoader)
 
 	sig := <-sigC
 	log.Printf("Received %d, shutting down", sig)
 
-	ctx, cancel := context.WithTimeout(context.Background(), (1 * time.Second))
 	defer cancel()
 	server.ShutdownServer(ctx)
 

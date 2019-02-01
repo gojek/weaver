@@ -13,33 +13,23 @@ import (
 var server *Weaver
 
 type Weaver struct {
-	httpServer      *http.Server
-	cancelRouteSync context.CancelFunc
+	httpServer *http.Server
 }
 
 func ShutdownServer(ctx context.Context) {
-	server.cancelRouteSync()
 	server.httpServer.Shutdown(ctx)
 }
 
-func StartServer() {
-	routeSyncCtx, cancelRouteSync := context.WithCancel(context.Background())
-	routeLoader, err := NewETCDRouteLoader()
-	if err != nil {
-		log.Printf("StartServer: failed to initialise etcd route loader: %s", err)
-		cancelRouteSync()
-	}
-
+func StartServer(ctx context.Context, routeLoader RouteLoader) {
 	proxyRouter := NewRouter(routeLoader)
-	err = proxyRouter.BootstrapRoutes(context.Background())
+	err := proxyRouter.BootstrapRoutes(context.Background())
 	if err != nil {
 		log.Printf("StartServer: failed to initialise proxy router: %s", err)
-		cancelRouteSync()
 	}
 
 	log.Printf("StartServer: bootstraped routes from etcd")
 
-	go proxyRouter.WatchRouteUpdates(routeSyncCtx)
+	go proxyRouter.WatchRouteUpdates(ctx)
 
 	proxy := middleware.Recover(wrapNewRelicHandler(&proxy{
 		router: proxyRouter,
@@ -56,8 +46,7 @@ func StartServer() {
 	httpServer.SetKeepAlivesEnabled(keepAliveEnabled)
 
 	server = &Weaver{
-		httpServer:      httpServer,
-		cancelRouteSync: cancelRouteSync,
+		httpServer: httpServer,
 	}
 
 	log.Printf("StartServer: starting weaver on %s", server.httpServer.Addr)
