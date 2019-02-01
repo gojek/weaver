@@ -9,8 +9,8 @@ import (
 	"time"
 
 	etcd "github.com/coreos/etcd/client"
-	"github.com/gojektech/weaver/internal/config"
-	"github.com/gojektech/weaver/pkg/logger"
+	"github.com/gojekfarm/weaver/internal/config"
+	"github.com/gojekfarm/weaver/pkg/logger"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"

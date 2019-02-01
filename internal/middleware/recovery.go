@@ -6,9 +6,9 @@ import (
 	"net/http"
 
 	raven "github.com/getsentry/raven-go"
-	"github.com/gojektech/weaver/internal/httperror"
-	"github.com/gojektech/weaver/pkg/instrumentation"
-	"github.com/gojektech/weaver/pkg/logger"
+	"github.com/gojekfarm/weaver/internal/httperror"
+	"github.com/gojekfarm/weaver/pkg/instrumentation"
+	"github.com/gojekfarm/weaver/pkg/logger"
 )
 
 func Recover(next http.Handler) http.Handler {

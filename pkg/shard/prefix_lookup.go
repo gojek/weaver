@@ -5,7 +5,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/gojektech/weaver/internal/domain"
+	"github.com/gojekfarm/weaver/internal/domain"
 )
 
 const (

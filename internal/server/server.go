@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gojektech/weaver/internal/config"
-	"github.com/gojektech/weaver/internal/middleware"
-	"github.com/gojektech/weaver/pkg/util"
+	"github.com/gojekfarm/weaver/internal/config"
+	"github.com/gojekfarm/weaver/internal/middleware"
+	"github.com/gojekfarm/weaver/pkg/util"
 )
 
 var server *Weaver

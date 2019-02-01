@@ -10,10 +10,10 @@ import (
 	"time"
 
 	raven "github.com/getsentry/raven-go"
-	"github.com/gojektech/weaver/internal/config"
-	"github.com/gojektech/weaver/internal/server"
-	"github.com/gojektech/weaver/pkg/instrumentation"
-	"github.com/gojektech/weaver/pkg/logger"
+	"github.com/gojekfarm/weaver/internal/config"
+	"github.com/gojekfarm/weaver/internal/server"
+	"github.com/gojekfarm/weaver/pkg/instrumentation"
+	"github.com/gojekfarm/weaver/pkg/logger"
 	cli "gopkg.in/urfave/cli.v1"
 )
 

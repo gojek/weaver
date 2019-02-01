@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/gojekfarm/hashring"
-	"github.com/gojektech/weaver/internal/domain"
+	"github.com/gojekfarm/weaver/internal/domain"
 	"github.com/pkg/errors"
 )
 

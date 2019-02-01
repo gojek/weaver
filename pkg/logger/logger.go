@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/gojektech/weaver/internal/config"
-	"github.com/gojektech/weaver/pkg/util"
+	"github.com/gojekfarm/weaver/internal/config"
+	"github.com/gojekfarm/weaver/pkg/util"
 	"github.com/sirupsen/logrus"
 )
 

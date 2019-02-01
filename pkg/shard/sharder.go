@@ -1,7 +1,7 @@
 package shard
 
 import (
-	"github.com/gojektech/weaver/internal/domain"
+	"github.com/gojekfarm/weaver/internal/domain"
 )
 
 type Sharder interface {

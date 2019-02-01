@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gojektech/weaver/internal/config"
+	"github.com/gojekfarm/weaver/internal/config"
 	newrelic "github.com/newrelic/go-agent"
 )
 

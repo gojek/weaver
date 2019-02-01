@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/gojektech/weaver/pkg/instrumentation"
+	"github.com/gojekfarm/weaver/pkg/instrumentation"
 )
 
 type Err503Handler struct {

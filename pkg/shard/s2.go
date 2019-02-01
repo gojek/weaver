@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/gojektech/weaver/internal/domain"
-	"github.com/gojektech/weaver/pkg/util"
+	"github.com/gojekfarm/weaver/internal/domain"
+	"github.com/gojekfarm/weaver/pkg/util"
 	geos2 "github.com/golang/geo/s2"
 )
 

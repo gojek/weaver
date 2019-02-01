@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/gojektech/weaver/pkg/instrumentation"
+	"github.com/gojekfarm/weaver/pkg/instrumentation"
 )
 
 func NotFoundHandler(w http.ResponseWriter, r *http.Request) {

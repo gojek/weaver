@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/gojektech/weaver/internal/domain"
-	"github.com/gojektech/weaver/pkg/shard"
+	"github.com/gojekfarm/weaver/internal/domain"
+	"github.com/gojekfarm/weaver/pkg/shard"
 	"github.com/pkg/errors"
 )
 

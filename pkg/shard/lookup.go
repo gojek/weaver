@@ -3,7 +3,7 @@ package shard
 import (
 	"encoding/json"
 
-	"github.com/gojektech/weaver/internal/domain"
+	"github.com/gojekfarm/weaver/internal/domain"
 )
 
 func NewLookupStrategy(data json.RawMessage) (Sharder, error) {

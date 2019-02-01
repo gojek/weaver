@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"strconv"
 
-	"github.com/gojektech/weaver/internal/domain"
+	"github.com/gojekfarm/weaver/internal/domain"
 	"github.com/pkg/errors"
 )
 

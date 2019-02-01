@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/gojektech/weaver/internal/config"
+	"github.com/gojekfarm/weaver/internal/config"
 	"github.com/pkg/errors"
 )
 

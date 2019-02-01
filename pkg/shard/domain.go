@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/gojektech/weaver/internal/config"
-	"github.com/gojektech/weaver/internal/domain"
+	"github.com/gojekfarm/weaver/internal/config"
+	"github.com/gojekfarm/weaver/internal/domain"
 	"github.com/pkg/errors"
 )
 
