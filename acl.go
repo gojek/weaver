@@ -1,19 +1,17 @@
-package server
+package weaver
 
 import (
 	"encoding/json"
 	"fmt"
-
-	"github.com/gojektech/weaver"
 )
 
 // ACL - Connects to an external endpoint
 type ACL struct {
-	ID             string                 `json:"id"`
-	Criterion      string                 `json:"criterion"`
-	EndpointConfig *weaver.EndpointConfig `json:"endpoint"`
+	ID             string          `json:"id"`
+	Criterion      string          `json:"criterion"`
+	EndpointConfig *EndpointConfig `json:"endpoint"`
 
-	Endpoint *weaver.Endpoint
+	Endpoint *Endpoint
 }
 
 // GenACL - Generates an ACL from JSON

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/gojektech/weaver"
 	"github.com/pkg/errors"
 	"github.com/vulcand/route"
 )
@@ -16,7 +17,7 @@ type Router struct {
 
 type apiName string
 
-func (router *Router) Route(req *http.Request) (*ACL, error) {
+func (router *Router) Route(req *http.Request) (*weaver.ACL, error) {
 	rt, err := router.Router.Route(req)
 	if err != nil {
 		return nil, errors.Wrapf(err, "failed to find route with url: %s", req.URL)
@@ -26,7 +27,7 @@ func (router *Router) Route(req *http.Request) (*ACL, error) {
 		return nil, errors.WithStack(fmt.Errorf("route not found: %s", req.URL))
 	}
 
-	acl, ok := rt.(*ACL)
+	acl, ok := rt.(*weaver.ACL)
 	if !ok {
 		return nil, errors.WithStack(fmt.Errorf("error in casting %v to acl", rt))
 	}
@@ -49,10 +50,10 @@ func (router *Router) BootstrapRoutes(ctx context.Context) error {
 	return router.loader.BootstrapRoutes(ctx, router.upsertACL)
 }
 
-func (router *Router) upsertACL(acl *ACL) error {
+func (router *Router) upsertACL(acl *weaver.ACL) error {
 	return router.UpsertRoute(acl.Criterion, acl)
 }
 
-func (router *Router) deleteACL(acl *ACL) error {
+func (router *Router) deleteACL(acl *weaver.ACL) error {
 	return router.RemoveRoute(acl.Criterion)
 }

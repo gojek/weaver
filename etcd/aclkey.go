@@ -3,7 +3,7 @@ package etcd
 import (
 	"fmt"
 
-	"github.com/gojektech/weaver/server"
+	"github.com/gojektech/weaver"
 )
 
 const (
@@ -19,6 +19,6 @@ func GenACLKey(key string) ACLKey {
 	return ACLKey(fmt.Sprintf("%s/acl", key))
 }
 
-func GenKey(acl *server.ACL, pfx string) ACLKey {
+func GenKey(acl *weaver.ACL, pfx string) ACLKey {
 	return ACLKey(fmt.Sprintf(ACLKeyFormat, pfx, acl.ID))
 }

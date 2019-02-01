@@ -61,7 +61,7 @@ func (rs *RouterSuite) TestRouteReturnsACL() {
 		nil)
 
 	// timeout is float64 because there are no integers in json
-	acl := &ACL{
+	acl := &weaver.ACL{
 		ID:        "svc-01",
 		Criterion: "Method(`GET`) && PathRegexp(`/(GF-|R-).*`)",
 		EndpointConfig: &weaver.EndpointConfig{
@@ -136,4 +136,3 @@ func (rs *RouterSuite) TestWatchRouteUpdatesCallsWatchRoutesOfLoader() {
 
 	routeLoader.AssertExpectations(rs.T())
 }
-

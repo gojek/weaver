@@ -1,9 +1,13 @@
 package server
 
-import "context"
+import (
+	"context"
 
-type UpsertRouteFunc func(*ACL) error
-type DeleteRouteFunc func(*ACL) error
+	"github.com/gojektech/weaver"
+)
+
+type UpsertRouteFunc func(*weaver.ACL) error
+type DeleteRouteFunc func(*weaver.ACL) error
 
 type RouteLoader interface {
 	BootstrapRoutes(context.Context, UpsertRouteFunc) error

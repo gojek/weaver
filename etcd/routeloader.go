@@ -33,7 +33,7 @@ type ETCDRouteLoader struct {
 }
 
 // PutACL - Upserts a given ACL
-func (routeLoader *ETCDRouteLoader) PutACL(acl *server.ACL) (ACLKey, error) {
+func (routeLoader *ETCDRouteLoader) PutACL(acl *weaver.ACL) (ACLKey, error) {
 	key := GenKey(acl, routeLoader.namespace)
 	val, err := json.Marshal(acl)
 	if err != nil {
@@ -47,12 +47,12 @@ func (routeLoader *ETCDRouteLoader) PutACL(acl *server.ACL) (ACLKey, error) {
 }
 
 // GetACL - Fetches an ACL given an ACLKey
-func (routeLoader *ETCDRouteLoader) GetACL(key ACLKey) (*server.ACL, error) {
+func (routeLoader *ETCDRouteLoader) GetACL(key ACLKey) (*weaver.ACL, error) {
 	res, err := etcd.NewKeysAPI(routeLoader.etcdClient).Get(context.Background(), string(key), nil)
 	if err != nil {
 		return nil, fmt.Errorf("fail to GET %s with %s", key, err.Error())
 	}
-	acl := &server.ACL{}
+	acl := &weaver.ACL{}
 	if err := json.Unmarshal([]byte(res.Node.Value), acl); err != nil {
 		return nil, err
 	}
@@ -110,7 +110,7 @@ func (routeLoader *ETCDRouteLoader) WatchRoutes(ctx context.Context, upsertRoute
 				continue
 			}
 		case "delete":
-			acl := &server.ACL{}
+			acl := &weaver.ACL{}
 			err := acl.GenACL(res.PrevNode.Value)
 			if err != nil {
 				logger.Errorf("error in unmarshalling %s: %v", res.PrevNode.Value, err)

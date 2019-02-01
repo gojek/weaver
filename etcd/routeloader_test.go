@@ -12,7 +12,6 @@ import (
 	etcd "github.com/coreos/etcd/client"
 	"github.com/gojektech/weaver/config"
 	"github.com/gojektech/weaver/pkg/logger"
-	"github.com/gojektech/weaver/server"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
@@ -44,7 +43,7 @@ func TestETCDRouteLoaderSuite(tst *testing.T) {
 }
 
 func (es *ETCDRouteLoaderSuite) TestPutACL() {
-	aclPut := &server.ACL{
+	aclPut := &weaver.ACL{
 		ID:        "svc-01",
 		Criterion: "Method(`GET`) && Path(`/ping`)",
 		EndpointConfig: &weaver.EndpointConfig{
@@ -74,7 +73,7 @@ func (es *ETCDRouteLoaderSuite) TestPutACL() {
 }
 
 func (es *ETCDRouteLoaderSuite) TestBootstrapRoutes() {
-	aclPut := &server.ACL{
+	aclPut := &weaver.ACL{
 		ID:        "svc-01",
 		Criterion: "Method(`GET`) && Path(`/ping`)",
 		EndpointConfig: &weaver.EndpointConfig{
@@ -87,7 +86,7 @@ func (es *ETCDRouteLoaderSuite) TestBootstrapRoutes() {
 	key, err := es.ng.PutACL(aclPut)
 	assert.NoError(es.T(), err, "failed to PUT %s", aclPut)
 
-	aclsChan := make(chan *server.ACL, 1)
+	aclsChan := make(chan *weaver.ACL, 1)
 	es.ng.BootstrapRoutes(context.Background(), genRouteProcessorMock(aclsChan))
 
 	deepEqual(es.T(), aclPut, <-aclsChan)
@@ -95,7 +94,7 @@ func (es *ETCDRouteLoaderSuite) TestBootstrapRoutes() {
 }
 
 func (es *ETCDRouteLoaderSuite) TestBootstrapRoutesSucceedWhenARouteUpsertFails() {
-	aclPut := &server.ACL{
+	aclPut := &weaver.ACL{
 		ID:        "svc-01",
 		Criterion: "Method(`GET`) && Path(`/ping`)",
 		EndpointConfig: &weaver.EndpointConfig{
@@ -144,7 +143,7 @@ func (es *ETCDRouteLoaderSuite) TestBootstrapRoutesSucceedWhenARouteHasInvalidDa
 func (es *ETCDRouteLoaderSuite) TestWatchRoutesUpsertRoutesWhenRoutesSet() {
 	newACL := newTestACL("path")
 
-	aclsUpserted := make(chan *server.ACL, 1)
+	aclsUpserted := make(chan *weaver.ACL, 1)
 
 	watchCtx, cancelWatch := context.WithCancel(context.Background())
 	defer cancelWatch()
@@ -164,7 +163,7 @@ func (es *ETCDRouteLoaderSuite) TestWatchRoutesUpsertRoutesWhenRoutesUpdated() {
 	updatedACL := newTestACL("header")
 
 	_, err := es.ng.PutACL(newACL)
-	aclsUpserted := make(chan *server.ACL, 1)
+	aclsUpserted := make(chan *weaver.ACL, 1)
 	watchCtx, cancelWatch := context.WithCancel(context.Background())
 	defer cancelWatch()
 
@@ -184,7 +183,7 @@ func (es *ETCDRouteLoaderSuite) TestWatchRoutesDeleteRouteWhenARouteIsDeleted() 
 	key, err := es.ng.PutACL(newACL)
 	require.NoError(es.T(), err, "fail to PUT ACL %+v", newACL)
 
-	aclsDeleted := make(chan *server.ACL, 1)
+	aclsDeleted := make(chan *weaver.ACL, 1)
 
 	watchCtx, cancelWatch := context.WithCancel(context.Background())
 	defer cancelWatch()
@@ -198,8 +197,8 @@ func (es *ETCDRouteLoaderSuite) TestWatchRoutesDeleteRouteWhenARouteIsDeleted() 
 	deepEqual(es.T(), newACL, <-aclsDeleted)
 }
 
-func newTestACL(matcher string) *server.ACL {
-	return &server.ACL{
+func newTestACL(matcher string) *weaver.ACL {
+	return &weaver.ACL{
 		ID:        "svc-01",
 		Criterion: "Method(`GET`) && Path(`/ping`)",
 		EndpointConfig: &weaver.EndpointConfig{
@@ -221,14 +220,14 @@ func newTestACL(matcher string) *server.ACL {
 	}
 }
 
-func genRouteProcessorMock(c chan *server.ACL) func(*server.ACL) error {
-	return func(acl *server.ACL) error {
+func genRouteProcessorMock(c chan *weaver.ACL) func(*weaver.ACL) error {
+	return func(acl *weaver.ACL) error {
 		c <- acl
 		return nil
 	}
 }
 
-func deepEqual(t *testing.T, expected *server.ACL, actual *server.ACL) {
+func deepEqual(t *testing.T, expected *weaver.ACL, actual *weaver.ACL) {
 	assert.Equal(t, expected.ID, actual.ID)
 	assert.Equal(t, expected.Criterion, actual.Criterion)
 	assertEqualJSON(t, expected.EndpointConfig.ShardConfig, actual.EndpointConfig.ShardConfig)
@@ -249,10 +248,10 @@ func assertEqualJSON(t *testing.T, json1, json2 json.RawMessage) {
 	assert.True(t, reflect.DeepEqual(jsonVal1, jsonVal2))
 }
 
-func failingUpsertRouteFunc(acl *server.ACL) error {
+func failingUpsertRouteFunc(acl *weaver.ACL) error {
 	return errors.New("error")
 }
 
-func successUpsertRouteFunc(acl *server.ACL) error {
+func successUpsertRouteFunc(acl *weaver.ACL) error {
 	return nil
 }

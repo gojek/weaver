@@ -42,7 +42,7 @@ func (ps *ProxySuite) TestProxyHandlerOnSuccessfulRouting() {
 		_, _ = w.Write([]byte("foobar"))
 	}))
 
-	acl := &ACL{
+	acl := &weaver.ACL{
 		ID:        "svc-01",
 		Criterion: "Method(`GET`) && PathRegexp(`/(GF-|R-).*`)",
 		EndpointConfig: &weaver.EndpointConfig{
@@ -88,7 +88,7 @@ func (ps *ProxySuite) TestProxyHandlerOnBodyBasedMatcherWithModuloSharding() {
 		_, _ = w.Write([]byte("foobar"))
 	}))
 
-	acl := &ACL{
+	acl := &weaver.ACL{
 		ID:        "svc-01",
 		Criterion: "Method(`GET`) && PathRegexp(`/drivers`)",
 		EndpointConfig: &weaver.EndpointConfig{
@@ -135,7 +135,7 @@ func (ps *ProxySuite) TestProxyHandlerOnPathBasedMatcherWithModuloSharding() {
 		_, _ = w.Write([]byte("foobar"))
 	}))
 
-	acl := &ACL{
+	acl := &weaver.ACL{
 		ID:        "svc-01",
 		Criterion: "Method(`GET`) && PathRegexp(`/drivers`)",
 		EndpointConfig: &weaver.EndpointConfig{
@@ -187,7 +187,7 @@ func (ps *ProxySuite) TestProxyHandlerOnFailureRouting() {
 
 func (ps *ProxySuite) TestProxyHandlerOnMissingBackend() {
 
-	acl := &ACL{
+	acl := &weaver.ACL{
 		ID:        "svc-01",
 		Criterion: "Method(`GET`) && PathRegexp(`/(GF-|R-).*`)",
 		EndpointConfig: &weaver.EndpointConfig{
