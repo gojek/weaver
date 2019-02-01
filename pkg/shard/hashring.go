@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/gojekfarm/hashring"
-	"github.com/gojektech/weaver/internal/domain"
+	"github.com/gojektech/weaver"
 	"github.com/pkg/errors"
 )
 
@@ -34,10 +34,10 @@ func NewHashRingStrategy(data json.RawMessage) (Sharder, error) {
 
 type HashRingStrategy struct {
 	hashRing *hashring.HashRingCluster
-	backends map[string]*domain.Backend
+	backends map[string]*weaver.Backend
 }
 
-func (rs HashRingStrategy) Shard(key string) (*domain.Backend, error) {
+func (rs HashRingStrategy) Shard(key string) (*weaver.Backend, error) {
 	serverName := rs.hashRing.GetServer(key)
 	return rs.backends[serverName], nil
 }
@@ -61,13 +61,13 @@ func (hrCfg HashRingStrategyConfig) Validate() error {
 	return nil
 }
 
-func hashringBackends(cfg HashRingStrategyConfig) (*hashring.HashRingCluster, map[string]*domain.Backend, error) {
+func hashringBackends(cfg HashRingStrategyConfig) (*hashring.HashRingCluster, map[string]*weaver.Backend, error) {
 	if cfg.TotalVirtualBackends == nil || *cfg.TotalVirtualBackends < 0 {
 		defaultBackends := 1000
 		cfg.TotalVirtualBackends = &defaultBackends
 	}
 
-	backendDetails := map[string]*domain.Backend{}
+	backendDetails := map[string]*weaver.Backend{}
 	hashRingCluster := hashring.NewHashRingCluster(*cfg.TotalVirtualBackends)
 
 	virtualNodesFound := map[int]bool{}

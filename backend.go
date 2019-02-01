@@ -1,4 +1,4 @@
-package domain
+package weaver
 
 import (
 	"net"
@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/gojektech/weaver/internal/config"
+	"github.com/gojektech/weaver/config"
 	"github.com/pkg/errors"
 )
 

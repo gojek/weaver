@@ -3,7 +3,7 @@ package shard
 import (
 	"encoding/json"
 
-	"github.com/gojektech/weaver/internal/domain"
+	"github.com/gojektech/weaver"
 )
 
 func NewLookupStrategy(data json.RawMessage) (Sharder, error) {
@@ -23,9 +23,9 @@ func NewLookupStrategy(data json.RawMessage) (Sharder, error) {
 }
 
 type LookupStrategy struct {
-	backends map[string]*domain.Backend
+	backends map[string]*weaver.Backend
 }
 
-func (ls *LookupStrategy) Shard(key string) (*domain.Backend, error) {
+func (ls *LookupStrategy) Shard(key string) (*weaver.Backend, error) {
 	return ls.backends[key], nil
 }

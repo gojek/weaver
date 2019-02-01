@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gojektech/weaver/internal/config"
-	"github.com/gojektech/weaver/internal/middleware"
+	"github.com/gojektech/weaver/config"
+	"github.com/gojektech/weaver/middleware"
 	"github.com/gojektech/weaver/pkg/util"
 )
 

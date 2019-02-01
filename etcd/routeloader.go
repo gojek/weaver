@@ -7,9 +7,9 @@ import (
 	"sort"
 
 	etcd "github.com/coreos/etcd/client"
-	"github.com/gojektech/weaver/internal/config"
-	"github.com/gojektech/weaver/internal/server"
+	"github.com/gojektech/weaver/config"
 	"github.com/gojektech/weaver/pkg/logger"
+	"github.com/gojektech/weaver/server"
 	"github.com/pkg/errors"
 )
 

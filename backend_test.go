@@ -1,4 +1,4 @@
-package domain
+package weaver
 
 import (
 	"testing"

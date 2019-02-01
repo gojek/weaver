@@ -3,7 +3,7 @@ package etcd
 import (
 	"fmt"
 
-	"github.com/gojektech/weaver/internal/server"
+	"github.com/gojektech/weaver/server"
 )
 
 const (

@@ -8,11 +8,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/gojektech/weaver/internal/server"
-
 	etcd "github.com/coreos/etcd/client"
-	"github.com/gojektech/weaver/internal/config"
+	"github.com/gojektech/weaver/config"
 	"github.com/gojektech/weaver/pkg/logger"
+	"github.com/gojektech/weaver/server"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"

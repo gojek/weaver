@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/gojektech/weaver/internal/domain"
+	"github.com/gojektech/weaver"
 	"github.com/gojektech/weaver/pkg/util"
 	geos2 "github.com/golang/geo/s2"
 )
@@ -25,7 +25,7 @@ func NewS2Strategy(data json.RawMessage) (Sharder, error) {
 		return nil, err
 	}
 
-	s2Backends := make(map[string]*domain.Backend, len(cfg.Backends))
+	s2Backends := make(map[string]*weaver.Backend, len(cfg.Backends))
 	for s2id, backend := range cfg.Backends {
 		var err error
 		if s2Backends[s2id], err = parseBackend(backend); err != nil {
@@ -46,7 +46,7 @@ func NewS2Strategy(data json.RawMessage) (Sharder, error) {
 }
 
 type S2Strategy struct {
-	backends          map[string]*domain.Backend
+	backends          map[string]*weaver.Backend
 	shardKeySeparator string
 	shardKeyPosition  int
 }
@@ -141,7 +141,7 @@ func (s2s *S2Strategy) s2ID(key string) (uint64, error) {
 	return uint64(s2CellID), err
 }
 
-func (s2s *S2Strategy) Shard(key string) (*domain.Backend, error) {
+func (s2s *S2Strategy) Shard(key string) (*weaver.Backend, error) {
 	s2id, err := s2s.s2ID(key)
 	if err != nil {
 		return nil, err

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/gojektech/weaver/internal/domain"
+	"github.com/gojektech/weaver"
 	"github.com/gojektech/weaver/pkg/shard"
 	"github.com/pkg/errors"
 )
@@ -69,7 +69,7 @@ func NewEndpoint(endpointConfig *EndpointConfig) (*Endpoint, error) {
 	}, nil
 }
 
-func (endpoint *Endpoint) Shard(request *http.Request) (*domain.Backend, error) {
+func (endpoint *Endpoint) Shard(request *http.Request) (*weaver.Backend, error) {
 	shardKey, err := endpoint.shardKeyFunc(request)
 	if err != nil {
 		return nil, errors.Wrapf(err, "failed to find shardKey")

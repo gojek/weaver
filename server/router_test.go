@@ -7,7 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/gojektech/weaver/internal/config"
+	"github.com/gojektech/weaver/config"
 	"github.com/gojektech/weaver/pkg/logger"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"

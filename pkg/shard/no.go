@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/gojektech/weaver/internal/domain"
+	"github.com/gojektech/weaver"
 	"github.com/pkg/errors"
 )
 
@@ -18,8 +18,8 @@ func NewNoStrategy(data json.RawMessage) (Sharder, error) {
 		return nil, err
 	}
 
-	backendOptions := domain.BackendOptions{}
-	backend, err := domain.NewBackend(cfg.BackendName, cfg.BackendURL, backendOptions)
+	backendOptions := weaver.BackendOptions{}
+	backend, err := weaver.NewBackend(cfg.BackendName, cfg.BackendURL, backendOptions)
 	if err != nil {
 		return nil, errors.WithStack(fmt.Errorf("failed to create backend: %s: %+v", err, cfg))
 	}
@@ -30,10 +30,10 @@ func NewNoStrategy(data json.RawMessage) (Sharder, error) {
 }
 
 type NoStrategy struct {
-	backend *domain.Backend
+	backend *weaver.Backend
 }
 
-func (ns *NoStrategy) Shard(key string) (*domain.Backend, error) {
+func (ns *NoStrategy) Shard(key string) (*weaver.Backend, error) {
 	return ns.backend, nil
 }
 

@@ -3,8 +3,8 @@ package server
 import (
 	"net/http"
 
-	"github.com/gojektech/weaver/internal/config"
-	"github.com/gojektech/weaver/internal/httperror"
+	"github.com/gojektech/weaver/config"
+	"github.com/gojektech/weaver/httperror"
 	"github.com/gojektech/weaver/pkg/instrumentation"
 	"github.com/gojektech/weaver/pkg/logger"
 	newrelic "github.com/newrelic/go-agent"

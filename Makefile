@@ -2,7 +2,6 @@
 all: build fmt vet lint test
 
 ALL_PACKAGES=$(shell go list ./... | grep -v "vendor")
-
 APP_EXECUTABLE="out/weaver"
 COMMIT_HASH=$(shell git rev-parse --verify head | cut -c-1-8)
 BUILD_DATE=$(shell date +%Y-%m-%dT%H:%M:%S%z)

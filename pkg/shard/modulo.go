@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"strconv"
 
-	"github.com/gojektech/weaver/internal/domain"
+	"github.com/gojektech/weaver"
 	"github.com/pkg/errors"
 )
 
@@ -25,10 +25,10 @@ func NewModuloStrategy(data json.RawMessage) (Sharder, error) {
 }
 
 type ModuloStrategy struct {
-	backends map[string]*domain.Backend
+	backends map[string]*weaver.Backend
 }
 
-func (ms ModuloStrategy) Shard(key string) (*domain.Backend, error) {
+func (ms ModuloStrategy) Shard(key string) (*weaver.Backend, error) {
 	id, err := strconv.Atoi(key)
 	if err != nil {
 		return nil, errors.Wrapf(err, "not an integer key: %s", key)

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/gojektech/weaver/internal/config"
-	"github.com/gojektech/weaver/internal/domain"
+	"github.com/gojektech/weaver"
+	"github.com/gojektech/weaver/config"
 	"github.com/pkg/errors"
 )
 
@@ -39,8 +39,8 @@ func (bd BackendDefinition) Validate() error {
 	return nil
 }
 
-func toBackends(shardConfig map[string]BackendDefinition) (map[string]*domain.Backend, error) {
-	backends := map[string]*domain.Backend{}
+func toBackends(shardConfig map[string]BackendDefinition) (map[string]*weaver.Backend, error) {
+	backends := map[string]*weaver.Backend{}
 
 	for key, backendDefinition := range shardConfig {
 		if err := backendDefinition.Validate(); err != nil {
@@ -58,16 +58,16 @@ func toBackends(shardConfig map[string]BackendDefinition) (map[string]*domain.Ba
 	return backends, nil
 }
 
-func parseBackend(shardConfig BackendDefinition) (*domain.Backend, error) {
+func parseBackend(shardConfig BackendDefinition) (*weaver.Backend, error) {
 	timeoutInDuration := config.Proxy().ProxyDialerTimeoutInMS()
 
 	if shardConfig.Timeout != nil {
 		timeoutInDuration = time.Duration(*shardConfig.Timeout)
 	}
 
-	backendOptions := domain.BackendOptions{
+	backendOptions := weaver.BackendOptions{
 		Timeout: timeoutInDuration * time.Millisecond,
 	}
 
-	return domain.NewBackend(shardConfig.BackendName, shardConfig.BackendURL, backendOptions)
+	return weaver.NewBackend(shardConfig.BackendName, shardConfig.BackendURL, backendOptions)
 }

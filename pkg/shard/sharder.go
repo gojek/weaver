@@ -1,9 +1,9 @@
 package shard
 
 import (
-	"github.com/gojektech/weaver/internal/domain"
+	"github.com/gojektech/weaver"
 )
 
 type Sharder interface {
-	Shard(key string) (*domain.Backend, error)
+	Shard(key string) (*weaver.Backend, error)
 }

@@ -5,7 +5,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/gojektech/weaver/internal/domain"
+	"github.com/gojektech/weaver"
 )
 
 const (
@@ -54,11 +54,11 @@ func NewPrefixLookupStrategy(data json.RawMessage) (Sharder, error) {
 }
 
 type PrefixLookupStrategy struct {
-	backends       map[string]*domain.Backend
+	backends       map[string]*weaver.Backend
 	prefixSplitter string
 }
 
-func (pls *PrefixLookupStrategy) Shard(key string) (*domain.Backend, error) {
+func (pls *PrefixLookupStrategy) Shard(key string) (*weaver.Backend, error) {
 	prefix := strings.SplitAfter(key, pls.prefixSplitter)[0]
 	if pls.backends[prefix] == nil {
 		return pls.backends[defaultBackendKey], nil

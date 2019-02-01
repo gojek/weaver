@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gojektech/weaver/internal/config"
+	"github.com/gojektech/weaver/config"
 	"github.com/gojektech/weaver/pkg/logger"
 	statsd "gopkg.in/alexcesaro/statsd.v2"
 )
