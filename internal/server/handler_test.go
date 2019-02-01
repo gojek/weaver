@@ -22,7 +22,8 @@ type ProxySuite struct {
 
 func (ps *ProxySuite) SetupTest() {
 	logger.SetupLogger()
-	routeLoader, _ := NewETCDRouteLoader()
+
+	routeLoader := &mockRouteLoader{}
 
 	ps.rtr = NewRouter(routeLoader)
 	require.NotNil(ps.T(), ps.rtr)

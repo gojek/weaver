@@ -23,7 +23,7 @@ type RouterSuite struct {
 
 func (rs *RouterSuite) SetupTest() {
 	logger.SetupLogger()
-	routeLoader, _ := NewETCDRouteLoader()
+	routeLoader := &mockRouteLoader{}
 
 	rs.rtr = NewRouter(routeLoader)
 	require.NotNil(rs.T(), rs.rtr)
