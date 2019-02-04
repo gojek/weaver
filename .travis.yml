@@ -1,0 +1,21 @@
+language: go
+env:
+  - ETCD_VER=v3.2.4
+before_install:
+  - curl -L https://github.com/coreos/etcd/releases/download/${ETCD_VER}/etcd-${ETCD_VER}-linux-amd64.tar.gz -o /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz
+  - mkdir -p /tmp/etcd
+  - tar xzvf /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz -C /tmp/etcd --strip-components=1
+  - /tmp/etcd/etcd
+    --advertise-client-urls https://127.0.0.1:2379
+    --listen-client-urls https://127.0.0.1:2379
+    --cert-file ${TRAVIS_BUILD_DIR}/test/certs/certs/etcd0.localhost.crt
+    --key-file ${TRAVIS_BUILD_DIR}/test/certs/private/etcd0.localhost.key > /dev/null &
+
+go:
+ - master
+
+install:
+  - make setup
+
+script:
+  - make
