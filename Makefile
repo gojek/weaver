@@ -18,7 +18,7 @@ compile:
 build: deps compile fmt vet lint
 
 deps:
-	go mod tidy -v
+	GO111MODULE=on go mod tidy -v
 
 install:
 	GO111MODULE=on go install ./...
