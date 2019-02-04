@@ -1,7 +1,7 @@
 language: go
 
 env:
-  - ETCD_VER=v3.3.0
+  - ETCD_VER=v3.3.0 GO111MODULE=on
 before_install:
   - curl -L https://github.com/coreos/etcd/releases/download/${ETCD_VER}/etcd-${ETCD_VER}-linux-amd64.tar.gz -o /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz
   - mkdir -p /tmp/etcd
@@ -18,3 +18,13 @@ install:
 
 script:
   - make
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: curl -sL https://git.io/goreleaser | bash -s -- --rm-dist --skip-validate
+    on:
+      tags: true
+
+notifications:
+  email: false
