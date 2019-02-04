@@ -1,7 +1,7 @@
 language: go
 
 env:
-  - ETCD_VER=v3.2.4
+  - ETCD_VER=v3.3.0
 before_install:
   - curl -L https://github.com/coreos/etcd/releases/download/${ETCD_VER}/etcd-${ETCD_VER}-linux-amd64.tar.gz -o /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz
   - mkdir -p /tmp/etcd
