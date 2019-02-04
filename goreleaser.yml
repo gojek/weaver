@@ -1,0 +1,16 @@
+builds:
+  - main: ./cmd/weaver-server/
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - 386
+
+archive:
+  replacements:
+    amd64: 64-bit
+    386: 32-bit
+    darwin: macOS
+  format: zip
