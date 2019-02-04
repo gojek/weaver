@@ -13,7 +13,7 @@ before_install:
     --key-file ${TRAVIS_BUILD_DIR}/test/certs/private/etcd0.localhost.key > /dev/null &
 
 go:
- - master
+ - 1.11.2
 
 install:
   - make setup
