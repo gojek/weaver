@@ -1,4 +1,5 @@
 language: go
+
 env:
   - ETCD_VER=v3.2.4
 before_install:
