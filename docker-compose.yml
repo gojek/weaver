@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 services:
   dev_weaver_statsd:
@@ -35,6 +35,23 @@ services:
       ]
     ports:
       - "12379:2379"
+    networks:
+      - weaver_net
+
+  dev_weaver:
+    build: .
+    hostname: dev-weaver
+    volumes:
+      - .:/weaver
+    depends_on:
+      - dev_weaver_etcd
+      - dev_weaver_statsd
+    environment:
+      STATD_PORT: 8125
+      STATSD_HOST: dev_weaver_statsd
+      ETCD_ENDPOINTS: "http://dev_weaver_etcd:2379"
+    stdin_open: true
+    tty: true
     networks:
       - weaver_net
 

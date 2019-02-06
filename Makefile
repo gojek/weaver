@@ -8,7 +8,7 @@ APP_EXECUTABLE="out/weaver-server"
 COMMIT_HASH=$(shell git rev-parse --verify head | cut -c-1-8)
 BUILD_DATE=$(shell date +%Y-%m-%dT%H:%M:%S%z)
 
-setup:
+setup: copy-config
 	GO111MODULE=on go get -u github.com/golang/lint/golint
 
 compile:
@@ -50,6 +50,9 @@ copy-config:
 
 clean:
 	go clean && rm -rf ./vendor ./build ./weaver.conf.yaml
+
+docker-spec: docker-up
+	docker-compose exec -e GO111MODULE=on dev_weaver make test
 
 docker-up:
 	docker-compose up -d
