@@ -220,7 +220,7 @@ The value must be an integer. The backend is selected based on the modulo operat
 }
 ```
 
-Details: HTTP PUT to weaver.io/gojek/driver/location will be forwarded based on the result of hashing function from the here.
+Details: HTTP `PUT` to `weaver.io/gojek/driver/location` will be forwarded based on the result of hashing function from the here.
 In this scenario the key by which we select the backend is obtained by using value of DriverID header since matcher is header. For example if request had DriverID: 34345 header, and hashring  calculated hash of that values as hash(34345): 555, it will select backend with 500-749 key. This will forward the request to `http://backend3`
 
 ---
@@ -265,5 +265,5 @@ In this scenario the key by which we select the backend is obtained by using val
 }
 ```
 
-Details: HTTP GET to weaver.io/gojek/nearby will be forwarded based on the result of s2id calculation from X-Location header in the form of lat and long separated by , in accordance to shard_key_separator value. e.g -6.2428103,106.7940571. Weaver calculated s2id from lat and long because shard_key_position value is -1.
+Details: HTTP `GET` to `weaver.io/gojek/nearby` will be forwarded based on the result of s2id calculation from X-Location header in the form of lat and long separated by , in accordance to shard_key_separator value. e.g -6.2428103,106.7940571. Weaver calculated s2id from lat and long because shard_key_position value is -1.
 
