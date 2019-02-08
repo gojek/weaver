@@ -12,7 +12,7 @@ func Test404Handler(t *testing.T) {
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest("GET", "/hello", nil)
 
-	notFoundHandler(w, r)
+	notFoundError(w, r)
 
 	assert.Equal(t, http.StatusNotFound, w.Code)
 	assert.Equal(t, "{\"errors\":[{\"code\":\"weaver:route:not_found\",\"message\":\"Something went wrong\",\"message_title\":\"Failure\",\"message_severity\":\"failure\"}]}", w.Body.String())

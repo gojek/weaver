@@ -18,7 +18,7 @@ type errorDetails struct {
 	MessageSeverity string `json:"message_severity"`
 }
 
-func notFoundHandler(w http.ResponseWriter, r *http.Request) {
+func notFoundError(w http.ResponseWriter, r *http.Request) {
 	instrumentation.IncrementNotFound()
 	w.Header().Set("Content-Type", "application/json")
 

@@ -30,7 +30,7 @@ func (proxy *proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if err != nil || acl == nil {
 		logger.Errorrf(r, "failed to find route: %+v for request: %s", err, r.URL.String())
 
-		notFoundHandler(rw, r)
+		notFoundError(rw, r)
 		return
 	}
 
