@@ -1,4 +1,4 @@
-package httperror
+package server
 
 import (
 	"encoding/json"

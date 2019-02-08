@@ -1,4 +1,4 @@
-package middleware
+package server
 
 import (
 	"encoding/json"
@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	raven "github.com/getsentry/raven-go"
-	"github.com/gojektech/weaver/httperror"
 	"github.com/gojektech/weaver/pkg/instrumentation"
 	"github.com/gojektech/weaver/pkg/logger"
 )
@@ -30,9 +29,9 @@ func Recover(next http.Handler) http.Handler {
 				raven.CaptureError(recoveredErr, map[string]string{"error": recoveredErr.Error(), "request_url": r.URL.String()})
 
 				logger.Errorrf(r, "failed to route request: %+v", err)
-				errorResponse := httperror.WeaverResponse{
-					Errors: []httperror.ErrorDetails{
-						httperror.ErrorDetails{
+				errorResponse := WeaverResponse{
+					Errors: []ErrorDetails{
+						ErrorDetails{
 							Code:            "weaver:service:unavailable",
 							Message:         "Something went wrong",
 							MessageTitle:    "Failure",

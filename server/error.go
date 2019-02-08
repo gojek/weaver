@@ -1,4 +1,4 @@
-package httperror
+package server
 
 type WeaverResponse struct {
 	Errors []ErrorDetails `json:"errors"`

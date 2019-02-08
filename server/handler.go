@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/gojektech/weaver/config"
-	"github.com/gojektech/weaver/httperror"
 	"github.com/gojektech/weaver/pkg/instrumentation"
 	"github.com/gojektech/weaver/pkg/logger"
 	newrelic "github.com/newrelic/go-agent"
@@ -31,7 +30,7 @@ func (proxy *proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if err != nil || acl == nil {
 		logger.Errorrf(r, "failed to find route: %+v for request: %s", err, r.URL.String())
 
-		httperror.NotFoundHandler(rw, r)
+		NotFoundHandler(rw, r)
 		return
 	}
 
@@ -39,7 +38,7 @@ func (proxy *proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if backend == nil || err != nil {
 		logger.Errorrf(r, "failed to find backend for acl %s for: %s, error: %s", acl.ID, r.URL.String(), err)
 
-		httperror.Err503Handler{ACLName: acl.ID}.ServeHTTP(rw, r)
+		Err503Handler{ACLName: acl.ID}.ServeHTTP(rw, r)
 		return
 	}
 

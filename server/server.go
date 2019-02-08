@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"github.com/gojektech/weaver/config"
-	"github.com/gojektech/weaver/middleware"
 	"github.com/gojektech/weaver/pkg/util"
 )
 
@@ -31,7 +30,7 @@ func StartServer(ctx context.Context, routeLoader RouteLoader) {
 
 	go proxyRouter.WatchRouteUpdates(ctx)
 
-	proxy := middleware.Recover(wrapNewRelicHandler(&proxy{
+	proxy := Recover(wrapNewRelicHandler(&proxy{
 		router: proxyRouter,
 	}))
 
