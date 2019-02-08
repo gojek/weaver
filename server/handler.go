@@ -30,7 +30,7 @@ func (proxy *proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if err != nil || acl == nil {
 		logger.Errorrf(r, "failed to find route: %+v for request: %s", err, r.URL.String())
 
-		NotFoundHandler(rw, r)
+		notFoundHandler(rw, r)
 		return
 	}
 
@@ -38,7 +38,7 @@ func (proxy *proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if backend == nil || err != nil {
 		logger.Errorrf(r, "failed to find backend for acl %s for: %s, error: %s", acl.ID, r.URL.String(), err)
 
-		Err503Handler{ACLName: acl.ID}.ServeHTTP(rw, r)
+		err503Handler{ACLName: acl.ID}.ServeHTTP(rw, r)
 		return
 	}
 

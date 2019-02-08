@@ -28,10 +28,11 @@ func Recover(next http.Handler) http.Handler {
 
 				raven.CaptureError(recoveredErr, map[string]string{"error": recoveredErr.Error(), "request_url": r.URL.String()})
 
+				//TODO: move this as a method inside error.go
 				logger.Errorrf(r, "failed to route request: %+v", err)
-				errorResponse := WeaverResponse{
-					Errors: []ErrorDetails{
-						ErrorDetails{
+				errorResponse := weaverResponse{
+					Errors: []errorDetails{
+						{
 							Code:            "weaver:service:unavailable",
 							Message:         "Something went wrong",
 							MessageTitle:    "Failure",

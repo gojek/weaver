@@ -8,11 +8,21 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func Test404Handler(t *testing.T) {
+	w := httptest.NewRecorder()
+	r := httptest.NewRequest("GET", "/hello", nil)
+
+	notFoundHandler(w, r)
+
+	assert.Equal(t, http.StatusNotFound, w.Code)
+	assert.Equal(t, "{\"errors\":[{\"code\":\"weaver:route:not_found\",\"message\":\"Something went wrong\",\"message_title\":\"Failure\",\"message_severity\":\"failure\"}]}", w.Body.String())
+}
+
 func Test503Handler(t *testing.T) {
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest("GET", "/hello", nil)
 
-	Err503Handler{}.ServeHTTP(w, r)
+	err503Handler{}.ServeHTTP(w, r)
 
 	assert.Equal(t, http.StatusServiceUnavailable, w.Code)
 	assert.Equal(t, "{\"errors\":[{\"code\":\"weaver:service:unavailable\",\"message\":\"Something went wrong\",\"message_title\":\"Failure\",\"message_severity\":\"failure\"}]}", w.Body.String())
