@@ -11,17 +11,35 @@
 
 ## Description
 Weaver is a Layer-7 Load Balancer with Dynamic Sharding Strategies. 
-It is a simple HTTP reverse proxy which helps you with:
+It is a simple HTTP reverse proxy.
+
+## Features:
 
 - Sharding request based on headers/path/body fields
-- Finding Metrics on requests per route per backend
-- Dynamically configuring different routes
-
-It supports multiple algorithms for sharding requests.
+- Emits Metrics on requests per route per backend
+- Dynamic configuring of different routes (No restarts!)
+- Is Fast
+- Supports multiple algorithms for sharding requests (consistent hashing, modulo, s2 etc)
+- Packaged as a single self contained binary
+- Logs on failures (Observability)
 
 ## Installation
 
 ### Build from source
+
+- Clone the repo:
+```
+git clone git@github.com:gojektech/weaver.git
+```
+
+- Build to create weaver binary
+```
+make build
+```
+
+### Binaries for various architectures
+
+Download the binary for a release from: [here](https://github.com/gojekfarm/weaver/releases)
 
 ## License
 
