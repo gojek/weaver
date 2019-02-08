@@ -43,7 +43,7 @@ Download the binary for a release from: [here](https://github.com/gojekfarm/weav
 
 ## Architecture
 
-<p align="center"><img src="docs/weaver_architecture.png" width="360"></p>
+<p align="center"><img src="docs/weaver_architecture.png" width="860"></p>
 
 ## Contributing
 If you'd like to contribute to the project, refer to the [contributing documentation](https://github.com/gojektech/heimdall/blob/master/CONTRIBUTING.md)
