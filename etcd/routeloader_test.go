@@ -4,10 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"github.com/gojektech/weaver"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/gojektech/weaver"
 
 	etcd "github.com/coreos/etcd/client"
 	"github.com/gojektech/weaver/config"
@@ -18,13 +19,13 @@ import (
 )
 
 // Notice: This test uses time.Sleep, TODO: fix it
-type ETCDRouteLoaderSuite struct {
+type RouteLoaderSuite struct {
 	suite.Suite
 
-	ng *ETCDRouteLoader
+	ng *RouteLoader
 }
 
-func (es *ETCDRouteLoaderSuite) SetupTest() {
+func (es *RouteLoaderSuite) SetupTest() {
 	config.Load()
 	logger.SetupLogger()
 
@@ -34,15 +35,15 @@ func (es *ETCDRouteLoaderSuite) SetupTest() {
 	assert.NoError(es.T(), err)
 }
 
-func (es *ETCDRouteLoaderSuite) TestNewETCDRouteLoader() {
+func (es *RouteLoaderSuite) TestNewRouteLoader() {
 	assert.NotNil(es.T(), es.ng)
 }
 
-func TestETCDRouteLoaderSuite(tst *testing.T) {
-	suite.Run(tst, new(ETCDRouteLoaderSuite))
+func TestRouteLoaderSuite(tst *testing.T) {
+	suite.Run(tst, new(RouteLoaderSuite))
 }
 
-func (es *ETCDRouteLoaderSuite) TestPutACL() {
+func (es *RouteLoaderSuite) TestPutACL() {
 	aclPut := &weaver.ACL{
 		ID:        "svc-01",
 		Criterion: "Method(`GET`) && Path(`/ping`)",
@@ -72,7 +73,7 @@ func (es *ETCDRouteLoaderSuite) TestPutACL() {
 	assert.Nil(es.T(), es.ng.DelACL(key), "fail to DELETE %+v", aclPut)
 }
 
-func (es *ETCDRouteLoaderSuite) TestBootstrapRoutes() {
+func (es *RouteLoaderSuite) TestBootstrapRoutes() {
 	aclPut := &weaver.ACL{
 		ID:        "svc-01",
 		Criterion: "Method(`GET`) && Path(`/ping`)",
@@ -93,7 +94,7 @@ func (es *ETCDRouteLoaderSuite) TestBootstrapRoutes() {
 	assert.Nil(es.T(), es.ng.DelACL(key), "fail to DELETE %+v", aclPut)
 }
 
-func (es *ETCDRouteLoaderSuite) TestBootstrapRoutesSucceedWhenARouteUpsertFails() {
+func (es *RouteLoaderSuite) TestBootstrapRoutesSucceedWhenARouteUpsertFails() {
 	aclPut := &weaver.ACL{
 		ID:        "svc-01",
 		Criterion: "Method(`GET`) && Path(`/ping`)",
@@ -122,12 +123,12 @@ func (es *ETCDRouteLoaderSuite) TestBootstrapRoutesSucceedWhenARouteUpsertFails(
 	assert.Nil(es.T(), es.ng.DelACL(key), "fail to DELETE %+v", aclPut)
 }
 
-func (es *ETCDRouteLoaderSuite) TestBootstrapRoutesSucceedWhenARouteDoesntExist() {
+func (es *RouteLoaderSuite) TestBootstrapRoutesSucceedWhenARouteDoesntExist() {
 	err := es.ng.BootstrapRoutes(context.Background(), successUpsertRouteFunc)
 	require.NoError(es.T(), err, "should not have failed to bootstrap routes")
 }
 
-func (es *ETCDRouteLoaderSuite) TestBootstrapRoutesSucceedWhenARouteHasInvalidData() {
+func (es *RouteLoaderSuite) TestBootstrapRoutesSucceedWhenARouteHasInvalidData() {
 	aclPut := newTestACL("path")
 
 	value := `{ "blah": "a }`
@@ -140,7 +141,7 @@ func (es *ETCDRouteLoaderSuite) TestBootstrapRoutesSucceedWhenARouteHasInvalidDa
 	assert.Nil(es.T(), es.ng.DelACL(ACLKey(key)), "fail to DELETE %+v", aclPut)
 }
 
-func (es *ETCDRouteLoaderSuite) TestWatchRoutesUpsertRoutesWhenRoutesSet() {
+func (es *RouteLoaderSuite) TestWatchRoutesUpsertRoutesWhenRoutesSet() {
 	newACL := newTestACL("path")
 
 	aclsUpserted := make(chan *weaver.ACL, 1)
@@ -158,7 +159,7 @@ func (es *ETCDRouteLoaderSuite) TestWatchRoutesUpsertRoutesWhenRoutesSet() {
 	assert.Nil(es.T(), es.ng.DelACL(key), "fail to DELETE %+v", newACL)
 }
 
-func (es *ETCDRouteLoaderSuite) TestWatchRoutesUpsertRoutesWhenRoutesUpdated() {
+func (es *RouteLoaderSuite) TestWatchRoutesUpsertRoutesWhenRoutesUpdated() {
 	newACL := newTestACL("path")
 	updatedACL := newTestACL("header")
 
@@ -177,7 +178,7 @@ func (es *ETCDRouteLoaderSuite) TestWatchRoutesUpsertRoutesWhenRoutesUpdated() {
 	assert.Nil(es.T(), es.ng.DelACL(key), "fail to DELETE %+v", updatedACL)
 }
 
-func (es *ETCDRouteLoaderSuite) TestWatchRoutesDeleteRouteWhenARouteIsDeleted() {
+func (es *RouteLoaderSuite) TestWatchRoutesDeleteRouteWhenARouteIsDeleted() {
 	newACL := newTestACL("path")
 
 	key, err := es.ng.PutACL(newACL)
