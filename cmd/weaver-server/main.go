@@ -22,7 +22,7 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "weaver"
 	app.Version = fmt.Sprintf("%s built on %s (commit: %s)", Version, BuildDate, Commit)
-	app.Description = "A Layer-7 Load Balancer with Dynamic Sharding Strategies"
+	app.Description = "An Advanced HTTP Reverse Proxy with Dynamic Sharding Strategies"
 	app.Commands = []cli.Command{
 		{
 			Name:        "server",
