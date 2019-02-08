@@ -65,7 +65,7 @@ The various sharding strategies supported by weaver are:
 Details on configuring weaver can be found [here](docs/weaver_acls.md)
 
 ## Contributing
-If you'd like to contribute to the project, refer to the [contributing documentation](https://github.com/gojektech/heimdall/blob/master/CONTRIBUTING.md)
+If you'd like to contribute to the project, refer to the [contributing documentation](https://github.com/gojektech/weaver/blob/master/CONTRIBUTING.md)
 
 ## License
 
