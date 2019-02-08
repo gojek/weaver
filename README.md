@@ -6,6 +6,7 @@
 * [Features](#features)
 * [Installation](#installation)
 * [Architecture](#architecture)
+* [Configuration](#configuration)
 * [Contributing](#contributing)
 * [License](#license)
 
@@ -44,6 +45,23 @@ Download the binary for a release from: [here](https://github.com/gojekfarm/weav
 ## Architecture
 
 <p align="center"><img src="docs/weaver_architecture.png" width="860"></p>
+
+Weaver uses `etcd` as a control plane to match the incoming requests against a particular route config and shard the traffic to different backends based on some sharding strategy.
+
+Weaver can be configured for different routes matching different paths with various sharding strategies through a simple route config named ACL.
+
+The various sharding strategies supported by weaver are:
+
+- Consistent hashing (hashring)
+- Simple lookup based
+- Modulo
+- Prefix lookup
+- S2 based
+
+## Configuration
+
+### Defining ACL's
+
 
 ## Contributing
 If you'd like to contribute to the project, refer to the [contributing documentation](https://github.com/gojektech/heimdall/blob/master/CONTRIBUTING.md)
