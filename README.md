@@ -5,9 +5,8 @@
 * [Description](#description)
 * [Features](#features)
 * [Installation](#installation)
-* [Usage](#usage)
-* [Documentation](#documentation)
-* [FAQ](#faq)
+* [Architecture](#architecture)
+* [Contributing](#contributing)
 * [License](#license)
 
 ## Description
@@ -41,6 +40,11 @@ make build
 ### Binaries for various architectures
 
 Download the binary for a release from: [here](https://github.com/gojekfarm/weaver/releases)
+
+## Architecture
+
+## Contributing
+If you'd like to contribute to the project, refer to the [contributing documentation](https://github.com/gojektech/heimdall/blob/master/CONTRIBUTING.md)
 
 ## License
 
