@@ -26,5 +26,5 @@ func TestRecoverMiddleware(t *testing.T) {
 	Recover(testHandler{}).ServeHTTP(w, r)
 
 	assert.Equal(t, http.StatusInternalServerError, w.Code)
-	assert.Equal(t, "{\"errors\":[{\"code\":\"weaver:service:unavailable\",\"message\":\"Something went wrong\",\"message_title\":\"Failure\",\"message_severity\":\"failure\"}]}", w.Body.String())
+	assert.Equal(t, "{\"errors\":[{\"code\":\"weaver:service:unavailable\",\"message\":\"Something went wrong\",\"message_title\":\"Internal error\",\"message_severity\":\"failure\"}]}", w.Body.String())
 }

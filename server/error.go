@@ -39,6 +39,27 @@ func notFoundHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(response)
 }
 
+func internalServerError(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	w.WriteHeader(http.StatusInternalServerError)
+
+	errorResponse := weaverResponse{
+		Errors: []errorDetails{
+			{
+				Code:            "weaver:service:unavailable",
+				Message:         "Something went wrong",
+				MessageTitle:    "Internal error",
+				MessageSeverity: "failure",
+			},
+		},
+	}
+
+	response, _ := json.Marshal(errorResponse)
+	w.Write(response)
+}
+
+// TODO: decouple instrumentation from this errors function
 type err503Handler struct {
 	ACLName string
 }
