@@ -3,6 +3,7 @@
 <a href="https://travis-ci.org/gojektech/heimdall"><img src="https://travis-ci.org/gojektech/heimdall.svg?branch=master" alt="Build Status"></img></a> [![Go Report Card](https://goreportcard.com/badge/github.com/gojekfarm/weaver)](https://goreportcard.com/report/github.com/gojekfarm/weaver)
 
 * [Description](#description)
+* [Features](#features)
 * [Installation](#installation)
 * [Usage](#usage)
 * [Documentation](#documentation)
@@ -11,7 +12,7 @@
 
 ## Description
 Weaver is a Layer-7 Load Balancer with Dynamic Sharding Strategies. 
-It is a simple HTTP reverse proxy.
+It is a modern HTTP reverse proxy with advanced features.
 
 ## Features:
 
