@@ -325,7 +325,7 @@ func TestShouldShardUniformally(t *testing.T) {
 
 	strategy, _ := shard.NewHashRingStrategy(shardConfig)
 	shardDistribution := map[string]int{}
-	numKeys := 10000000
+	numKeys := 1000000
 	for i := 0; i < numKeys; i++ {
 		backend, err := strategy.Shard(strconv.Itoa(i))
 		assert.Nil(t, err, "Failed to Shard for key %d", i)
