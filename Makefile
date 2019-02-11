@@ -51,8 +51,12 @@ copy-config:
 clean:
 	go clean && rm -rf ./vendor ./build ./weaver.conf.yaml
 
-docker-spec: docker-up
-	docker-compose exec -e GO111MODULE=on dev_weaver make test
+docker-clean:
+	docker-compose down
+
+docker-spec: docker-clean docker-up
+	docker-compose build
+	docker-compose run dev_weaver
 
 docker-up:
 	docker-compose up -d
