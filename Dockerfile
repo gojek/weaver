@@ -1,15 +1,11 @@
 FROM golang:1.11.2-alpine
 
-ENV GOOS linux
-ENV GOARCH amd64
 ENV GO111MODULE on
 
-RUN apk add bash ca-certificates git make
+RUN apk --no-cache add gcc g++ make ca-certificates git
 
 RUN mkdir /weaver
 WORKDIR /weaver
 
 COPY go.mod .
 COPY go.sum .
-
-RUN go mod download
