@@ -21,6 +21,7 @@ import (
 func main() {
 	app := cli.NewApp()
 	app.Name = "weaver"
+	app.Usage = "run weaver-server"
 	app.Version = fmt.Sprintf("%s built on %s (commit: %s)", Version, BuildDate, Commit)
 	app.Description = "An Advanced HTTP Reverse Proxy with Dynamic Sharding Strategies"
 	app.Commands = []cli.Command{

@@ -13,7 +13,7 @@ setup: copy-config
 
 compile:
 	mkdir -p out/
-	GO111MODULE=on go build -o $(APP_EXECUTABLE) -ldflags "-X main.BuildDate=$(BUILD_DATE) -X main.Commit=$(COMMIT_HASH) -s -w"
+	GO111MODULE=on go build -o $(APP_EXECUTABLE) -ldflags "-X main.BuildDate=$(BUILD_DATE) -X main.Commit=$(COMMIT_HASH) -s -w" ./cmd/weaver-server
 
 build: deps compile fmt vet lint
 
@@ -58,8 +58,15 @@ docker-spec: docker-clean docker-up
 	docker-compose build
 	docker-compose run dev_weaver
 
+server-start:
+	docker-compose build
+	docker-compose run dev_weaver_server
+
 docker-up:
 	docker-compose up -d
+
+run-server: compile
+	$(APP_EXECUTABLE) server
 
 start: docker-up compile
 	$(APP_EXECUTABLE) server
