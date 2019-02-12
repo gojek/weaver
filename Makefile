@@ -59,7 +59,6 @@ docker-spec: docker-clean docker-up
 	docker-compose run dev_weaver
 
 server-start:
-	docker-compose build
 	docker-compose run dev_weaver_server
 
 docker-up:
