@@ -11,7 +11,7 @@ before_install:
     --listen-client-urls http://127.0.0.1:12379 > /dev/null &
 
 go:
- - 1.11.2
+ - 1.11.5
 
 install:
   - make setup
