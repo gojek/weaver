@@ -10,6 +10,8 @@ metadata:
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: server
+    app.kubernetes.io/part-of: weaver
   name: {{ template "weaver.fullname" . }}
 spec:
 # Provides options for the service so chart users have the full choice
@@ -37,3 +39,32 @@ spec:
   selector:
     app.kubernetes.io/name: {{ template "weaver.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
+
+{{- if .Values.etcd.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+  {{- if .Values.service.annotations }}
+    {{- toYaml .Values.service.annotations | indent 4 }}
+  {{- end }}
+  labels:
+    app.kubernetes.io/name: "etcd"
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: control-pane
+    app.kubernetes.io/part-of: weaver
+  name: "etcd"
+spec:
+  ports:
+    - port: {{ .Values.etcd.peerPort }}
+      name: etcd-server
+    - port: {{ .Values.etcd.clientPort }}
+      name: etcd-client
+  clusterIP: None
+  selector:
+    app.kubernetes.io/name: "etcd"
+    app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

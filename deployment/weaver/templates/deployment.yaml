@@ -29,7 +29,20 @@ spec:
             - name: http
               containerPort: {{ .Values.service.containerPort }}
               protocol: TCP
-          {{- if .Values.resources }}
+          env:          
+            - name: "SERVER_HOST"
+              value: "0.0.0.0"
+            - name: "SERVER_PORT"
+              value: "8080"
+            - name: "ETCD_KEY_PREFIX"
+              value: "weaver"
+            - name: "ETCD_ENDPOINTS"
+              value: "http://etcd:2379"
+            - name: "STATSD_ENABLED"
+              value: "false"
+            - name: "NEW_RELIC_ENABLED"
+              value: "false"
+           {{- if .Values.resources }}
           resources:
             # Minikube when high resource requests are specified by default.
             {{- toYaml .Values.resources | indent 12 }}
