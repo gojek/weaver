@@ -7,7 +7,6 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 
 	raven "github.com/getsentry/raven-go"
 	"github.com/gojektech/weaver/config"
@@ -58,7 +57,7 @@ func startWeaver(_ *cli.Context) error {
 		log.Printf("StartServer: failed to initialise etcd route loader: %s", err)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), (1 * time.Second))
+	ctx, cancel := context.WithCancel(context.Background())
 	go server.StartServer(ctx, routeLoader)
 
 	sig := <-sigC
