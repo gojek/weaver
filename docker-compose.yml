@@ -58,7 +58,9 @@ services:
 
   dev_weaver_server:
     build: .
-    command: make run-server
+    command:
+      - cp `which weaver` /weaver/out/weaver-server
+      - make run-server
     hostname: dev-weaver-server
     volumes:
       - .:/weaver
