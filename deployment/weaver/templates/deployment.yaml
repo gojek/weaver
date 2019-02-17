@@ -27,13 +27,13 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.containerPort }}
+              containerPort: {{ .Values.service.targetPort }}
               protocol: TCP
           env:          
             - name: "PROXY_HOST"
               value: "0.0.0.0"
             - name: "PROXY_PORT"
-              value: "8080"
+              value: {{ .Values.service.targetPort | quote }}
             - name: "PROXY_DIALER_TIMEOUT_IN_MS"
               value: "1000"
             - name: "PROXY_DIALER_KEEP_ALIVE_IN_MS"

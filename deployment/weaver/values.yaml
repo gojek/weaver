@@ -15,7 +15,7 @@ fullnameOverride: ""
 service:
   type: ClusterIP
   port: 80
-  containerPort: 8080
+  targetPort: 8080
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

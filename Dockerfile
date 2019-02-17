@@ -10,7 +10,7 @@ WORKDIR /weaver
 RUN make setup
 RUN make build
 
-FROM golang:1.11.2-alpine
+FROM alpine:latest
 
 COPY --from=base /weaver/out/weaver-server /usr/local/bin/weaver
 
