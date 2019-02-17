@@ -35,7 +35,6 @@ deploy:
       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
       - docker build . -t gojektech/weaver:$TRAVIS_TAG
       - docker push gojktech/weaver:$TRAVIS_TAG
-      on:
 
 notifications:
   email: false
