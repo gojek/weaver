@@ -29,48 +29,11 @@ spec:
             - name: http
               containerPort: {{ .Values.service.targetPort }}
               protocol: TCP
-          env:          
-            - name: "PROXY_HOST"
-              value: "0.0.0.0"
-            - name: "PROXY_PORT"
-              value: {{ .Values.service.targetPort | quote }}
-            - name: "PROXY_DIALER_TIMEOUT_IN_MS"
-              value: "1000"
-            - name: "PROXY_DIALER_KEEP_ALIVE_IN_MS"
-              value: "100"
-            - name: "PROXY_IDLE_CONN_TIMEOUT_IN_MS"
-              value : "100"
-            - name: "PROXY_MAX_IDLE_CONNS"
-              value: "100"
-            - name: "SENTRY_DSN"
-              value: "sentry"
-            - name: "SERVER_READ_TIMEOUT"
-              value: "100"
-            - name: "SERVER_WRITE_TIMEOUT"
-              value: "100"
-            - name: "ETCD_KEY_PREFIX"
-              value: "weaver"
-            - name: "ETCD_ENDPOINTS"
-              value: "http://etcd:2379"
-            - name: "ETCD_DIAL_TIMEOUT"
-              value: "5"
-            - name: "NEW_RELIC_APP_NAME"
-              value: "weaver"
-            - name: "NEW_RELIC_LICENSE_KEY"
-              value: "weaver-temp-license"
-            - name: "STATSD_ENABLED"
-              value: "false"
-            - name: "STATSD_PREFIX"
-              value: "weaver"
-            - name: "STATSD_PORT"
-              value: "8125"
-            - name: "STATSD_FLUSH_PERIOD_IN_SECONDS"
-              value: "10"
-            - name: "STATSD_HOST"
-              value: "localhost"
-            - name: "NEW_RELIC_ENABLED"
-              value: "false"
-           {{- if .Values.resources }}
+          {{- if .Values.weaver.env }}
+          env:
+            {{- toYaml .Values.weaver.env | indent 12 }}
+          {{- end }}
+          {{- if .Values.resources }}
           resources:
             # Minikube when high resource requests are specified by default.
             {{- toYaml .Values.resources | indent 12 }}

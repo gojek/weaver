@@ -30,7 +30,7 @@ eval $(minikube docker-env)
 docker build . -t weaver:stable
 
 # Deploy weaver to kubernets
-helm upgrade --debug --install proxy-cluster ./deployment/weaver --set service.type=NodePort
+helm upgrade --debug --install proxy-cluster ./deployment/weaver --set service.type=NodePort -f ./deployment/weaver/values-env.yaml
 ```
 
 We are setting service type as NodePort so that we can access it from local machine.
@@ -70,7 +70,7 @@ and deploy using curl request by issuing following commands.
 
 ```sh
 # You can get pod name by running this command -  kubectx get pods | grep weaver | awk '{print $1}'
-kubectl cp examples/body_lookup/estimate_acl.json simple-sharded-cluster-weaver-7989dd6dcf-96p9x:/go/
+kubectl cp examples/body_lookup/estimate_acl.json proxy-cluster-weaver-79fb49db6f-tng8r:/go/
 
 # Set path in etcd using curl command
 curl -v etcd:2379/v2/keys/weaver/acls/estimate/acl -XPUT --data-urlencode "value@estimate_acl.json"
