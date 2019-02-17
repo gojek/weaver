@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: weaver
+  repository: gojektech/weaver
   tag: stable
   pullPolicy: IfNotPresent
 
