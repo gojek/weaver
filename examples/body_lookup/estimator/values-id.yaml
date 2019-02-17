@@ -1,0 +1,6 @@
+# Default env values for Indonesia cluster
+env:
+  maxAmount: 100000
+  minAmount: 1000
+  currency: IDR
+

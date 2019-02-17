@@ -1,0 +1,5 @@
+# Default env values for Singapore cluster
+env:
+  maxAmount: 100
+  minAmount: 10
+  currency: SGD
