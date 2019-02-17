@@ -1,6 +1,6 @@
 .PHONY: all
 
-all: build fmt vet lint test
+all: build fmt vet lint test coverage
 default: build fmt vet lint test
 
 ALL_PACKAGES=$(shell go list ./... | grep -v "vendor")
@@ -8,8 +8,9 @@ APP_EXECUTABLE="out/weaver-server"
 COMMIT_HASH=$(shell git rev-parse --verify head | cut -c-1-8)
 BUILD_DATE=$(shell date +%Y-%m-%dT%H:%M:%S%z)
 
-setup: copy-config
+setup:
 	GO111MODULE=on go get -u github.com/golang/lint/golint
+	GO111MODULE=on go get github.com/mattn/goveralls
 
 compile:
 	mkdir -p out/
@@ -69,4 +70,7 @@ run-server: compile
 
 start: docker-up compile
 	$(APP_EXECUTABLE) server
+
+coverage:
+	goveralls -service=travis-ci
 

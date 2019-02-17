@@ -25,7 +25,7 @@ func main() {
 	app.Description = "An Advanced HTTP Reverse Proxy with Dynamic Sharding Strategies"
 	app.Commands = []cli.Command{
 		{
-			Name:        "server",
+			Name:        "start",
 			Description: "Start weaver server",
 			Action:      startWeaver,
 		},
