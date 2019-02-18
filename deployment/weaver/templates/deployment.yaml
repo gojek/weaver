@@ -15,7 +15,7 @@ spec:
       {{- if .Values.podAnnotations }}
       # Allows custom annotations to be specified
       annotations:
-        {{- toYaml .Values.podAnnotations | indent 8 }}
+        {{- toYaml .Values.podAnnotations | nindent 8 }}
       {{- end }}
       labels:
         app.kubernetes.io/name: {{ template "weaver.name" . }}
@@ -31,15 +31,15 @@ spec:
               protocol: TCP
           {{- if .Values.weaver.env }}
           env:
-            {{- toYaml .Values.weaver.env | indent 12 }}
+            {{ toYaml .Values.weaver.env | indent 12}}
           {{- end }}
           {{- if .Values.resources }}
           resources:
             # Minikube when high resource requests are specified by default.
-            {{- toYaml .Values.resources | indent 12 }}
+            {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector:
         # Node selectors can be important on mixed Windows/Linux clusters.
-        {{- toYaml .Values.nodeSelector | indent 8 }}
+        {{- toYaml .Values.nodeSelector | nindent 8 }}
       {{- end }}
