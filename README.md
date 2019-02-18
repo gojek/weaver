@@ -71,7 +71,7 @@ Details on configuring weaver can be found [here](docs/weaver_acls.md)
 
 ### Please note
 
-As the famous saying goes, `All Load balancers are proxies, but not every proxy is a load balancer`, weaver currently does not support laod balancing.
+As the famous saying goes, `All Load balancers are proxies, but not every proxy is a load balancer`, weaver currently does not support load balancing.
 
 ## Contributing
 If you'd like to contribute to the project, refer to the [contributing documentation](https://github.com/gojektech/weaver/blob/master/CONTRIBUTING.md)
