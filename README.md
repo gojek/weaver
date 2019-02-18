@@ -4,6 +4,8 @@
   <a href="https://golangci.com"><img src="https://golangci.com/badges/github.com/gojektech/weaver.svg"></img></a>
 [![Coverage Status](https://coveralls.io/repos/github/gojektech/weaver/badge.svg?branch=master)](https://coveralls.io/github/gojektech/weaver?branch=master)
 
+<p align="center"><img src="docs/weaver-logo.png" width="360"></p>
+
 * [Description](#description)
 * [Features](#features)
 * [Installation](#installation)
