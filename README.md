@@ -5,6 +5,8 @@
 <a href="https://travis-ci.org/gojektech/weaver"><img src="https://travis-ci.org/gojektech/weaver.svg?branch=master" alt="Build Status"></img></a> [![Go Report Card](https://goreportcard.com/badge/github.com/gojekfarm/weaver)](https://goreportcard.com/report/github.com/gojekfarm/weaver)
   <a href="https://golangci.com"><img src="https://golangci.com/badges/github.com/gojektech/weaver.svg"></img></a>
 [![Coverage Status](https://coveralls.io/repos/github/gojektech/weaver/badge.svg?branch=master)](https://coveralls.io/github/gojektech/weaver?branch=master)
+[![GitHub Release](https://img.shields.io/github/release/gojektech/weaver.svg?style=flat)](https://github.com/gojektech/weaver/releases)
+
 
 * [Description](#description)
 * [Features](#features)
