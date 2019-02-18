@@ -1,7 +1,10 @@
 language: go
 
 env:
-  - ETCD_VER=v3.3.0 GO111MODULE=on
+  global:
+    - secure: "c3DI8KXPuVlJ9AerXw0ZIFvQVK/ImNzryDnbZdeXnld657Y63h6yhR8Y92NSydahoaG7cvDEQK6hJDSDc8j/vB3LVvfAAn6ZfhfYKsp40wEBf7Q6eByfddZ7U4Yfc/dCoKBZaQHkohPCxM/DMTg9PaAD73+jqTfYydQUHcJx9hLoBIin8IkzyJ0O7Lf8ZPCBYitV2QwrJ0x9uwzezavy1xwtraCyjQ2QNF0IebKnSFXfKmagUj77wWkVVYGBGmjYlWZV1g0SISHsNbx1E4ftNHrraf2pMoMgSEUSyzEouklLxawoHokbf0fc9arDk0jg+1jhu/2waOXFYyAMidglwhBe0C6fs9qf+r/mDUJqB6M1a3pRAGswjysE4wIynQ3Vkqz8RYQ4dWaPamwuAQIizjO4XmilAh1kHn6qMwiDanJ+AJJcPK2LhnP7n6AWGtkjTzR7y3hqcJBqi3hVNsILkutG0LaR+Eu1cKO+vGFeBa5jIBSXnUCY+2kZrWTBaYEHbrmAfY+mISwaWh3YzNbHBoZHJt9QLLHokt1BdD/xOK7DHkKPta8YqHyUL7EavOw8e76TNtofOEntMlubb2dhUJ0PGawX6nGnoMGyV8JgFUIkUkiZydiU3of/Qvm9f32rAcHZQlyzuC7EDCmD113ndYczxzsd6VvOuRw4O7+VBv4="
+    - ETCD_VER=v3.3.0 GO111MODULE=on
+
 before_install:
   - curl -L https://github.com/coreos/etcd/releases/download/${ETCD_VER}/etcd-${ETCD_VER}-linux-amd64.tar.gz -o /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz
   - mkdir -p /tmp/etcd
@@ -13,11 +16,19 @@ before_install:
 go:
  - 1.11.5
 
+services:
+  - docker
+
 install:
   - make setup
 
 script:
   - make
+
+before_deploy:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker build . -t gojektech/weaver:$TRAVIS_TAG
+  - docker tag gojektech/weaver:$TRAVIS_TAG gojektech/weaver:latest
 
 deploy:
   - provider: script
@@ -25,6 +36,9 @@ deploy:
     script: curl -sL https://git.io/goreleaser | bash -s -- --rm-dist --skip-validate
     on:
       tags: true
+
+  - provider: script
+    script: docker push gojektech/weaver:$TRAVIS_TAG && docker push gojektech/weaver:latest
 
 notifications:
   email: false
