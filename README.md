@@ -7,7 +7,6 @@
 [![Coverage Status](https://coveralls.io/repos/github/gojektech/weaver/badge.svg?branch=master)](https://coveralls.io/github/gojektech/weaver?branch=master)
 [![GitHub Release](https://img.shields.io/github/release/gojektech/weaver.svg?style=flat)](https://github.com/gojektech/weaver/releases)
 
-
 * [Description](#description)
 * [Features](#features)
 * [Installation](#installation)
@@ -69,6 +68,10 @@ The various sharding strategies supported by weaver are:
 ### Defining ACL's
 
 Details on configuring weaver can be found [here](docs/weaver_acls.md)
+
+### Please note
+
+As the famous saying goes, `All Load balancers are proxies, but not every proxy is a load balancer`, weaver currently does not support laod balancing.
 
 ## Contributing
 If you'd like to contribute to the project, refer to the [contributing documentation](https://github.com/gojektech/weaver/blob/master/CONTRIBUTING.md)
