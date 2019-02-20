@@ -1,44 +1,64 @@
 language: go
 
+go: 1.11.5
+
 env:
   global:
-    - secure: "c3DI8KXPuVlJ9AerXw0ZIFvQVK/ImNzryDnbZdeXnld657Y63h6yhR8Y92NSydahoaG7cvDEQK6hJDSDc8j/vB3LVvfAAn6ZfhfYKsp40wEBf7Q6eByfddZ7U4Yfc/dCoKBZaQHkohPCxM/DMTg9PaAD73+jqTfYydQUHcJx9hLoBIin8IkzyJ0O7Lf8ZPCBYitV2QwrJ0x9uwzezavy1xwtraCyjQ2QNF0IebKnSFXfKmagUj77wWkVVYGBGmjYlWZV1g0SISHsNbx1E4ftNHrraf2pMoMgSEUSyzEouklLxawoHokbf0fc9arDk0jg+1jhu/2waOXFYyAMidglwhBe0C6fs9qf+r/mDUJqB6M1a3pRAGswjysE4wIynQ3Vkqz8RYQ4dWaPamwuAQIizjO4XmilAh1kHn6qMwiDanJ+AJJcPK2LhnP7n6AWGtkjTzR7y3hqcJBqi3hVNsILkutG0LaR+Eu1cKO+vGFeBa5jIBSXnUCY+2kZrWTBaYEHbrmAfY+mISwaWh3YzNbHBoZHJt9QLLHokt1BdD/xOK7DHkKPta8YqHyUL7EavOw8e76TNtofOEntMlubb2dhUJ0PGawX6nGnoMGyV8JgFUIkUkiZydiU3of/Qvm9f32rAcHZQlyzuC7EDCmD113ndYczxzsd6VvOuRw4O7+VBv4="
-    - ETCD_VER=v3.3.0 GO111MODULE=on
+    - ETCD_VER=v3.3.0
+    - GO111MODULE=on
+    - DOCKER_LATEST=latest
 
-before_install:
-  - curl -L https://github.com/coreos/etcd/releases/download/${ETCD_VER}/etcd-${ETCD_VER}-linux-amd64.tar.gz -o /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz
-  - mkdir -p /tmp/etcd
-  - tar xzvf /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz -C /tmp/etcd --strip-components=1
-  - /tmp/etcd/etcd
-    --advertise-client-urls http://127.0.0.1:12379
-    --listen-client-urls http://127.0.0.1:12379 > /dev/null &
+matrix:
+  exclude:
+    go: 1.11.5
 
-go:
- - 1.11.5
+setup_etcd: &setup_etcd
+  before_script:
+    - curl -L https://github.com/coreos/etcd/releases/download/${ETCD_VER}/etcd-${ETCD_VER}-linux-amd64.tar.gz -o /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz
+    - mkdir -p /tmp/etcd
+    - tar xzvf /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz -C /tmp/etcd --strip-components=1
+    - /tmp/etcd/etcd --advertise-client-urls http://127.0.0.1:12379 --listen-client-urls http://127.0.0.1:12379 > /dev/null &
+
+build_docker_image: &build_docker_image
+  before_script:
+    - |
+      docker-compose build dev_weaver
+      [ ! -z $TRAVIS_TAG ] && docker tag weaver_dev_weaver:$DOCKER_LATEST gojektech/weaver:$TRAVIS_TAG
+      [ ! -z $TRAVIS_TAG ] && docker tag gojektech/weaver:$TRAVIS_TAG gojektech/weaver:$DOCKER_LATEST
+      docker images
 
 services:
   - docker
 
-install:
-  - make setup
+stages:
+  - test
+  - name: deploy
+    if: (repo == gojektech/weaver) AND (branch == master) AND (tag IS present)
 
-script:
-  - make
+# travis is stupid to do its own custom install and script things
+# This is the only way to skip them from running
+before_script: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+install: echo "Skip global installing..."
+script: echo "Skip global script..."
 
-before_deploy:
-  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
-  - docker build . -t gojektech/weaver:$TRAVIS_TAG
-  - docker tag gojektech/weaver:$TRAVIS_TAG gojektech/weaver:latest
+jobs:
+  include:
+    - stage: test
+    - name: "Make Spec"
+      <<: *setup_etcd
+      script: make test
+    - name: "Docker Spec"
+      <<: *build_docker_image
+      script: make docker-spec
+      after_script: make docker-clean
 
-deploy:
-  - provider: script
-    skip_cleanup: true
-    script: curl -sL https://git.io/goreleaser | bash -s -- --rm-dist --skip-validate
-    on:
-      tags: true
-
-  - provider: script
-    script: docker push gojektech/weaver:$TRAVIS_TAG && docker push gojektech/weaver:latest
+    - stage: deploy
+    - name: "Release Builds"
+      script: curl -sL https://git.io/goreleaser | bash -s -- --rm-dist --skip-validate
+    - name: "Docker Builds"
+      <<: *build_docker_image
+      script: docker push gojektech/weaver:$TRAVIS_TAG && docker push gojektech/weaver:$DOCKER_LATEST
 
 notifications:
   email: false
+
