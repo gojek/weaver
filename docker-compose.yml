@@ -1,4 +1,4 @@
-version: '3'
+version: '3.4'
 
 services:
   dev_weaver_statsd:
@@ -39,11 +39,11 @@ services:
       - weaver_net
 
   dev_weaver:
-    build: .
+    build:
+      context: .
+      target: builder
     command: make test
     hostname: dev-weaver
-    volumes:
-      - .:/weaver
     depends_on:
       - dev_weaver_etcd
       - dev_weaver_statsd
@@ -60,8 +60,6 @@ services:
     build: .
     command: make run-server
     hostname: dev-weaver-server
-    volumes:
-      - .:/weaver
     depends_on:
       - dev_weaver_etcd
       - dev_weaver_statsd
