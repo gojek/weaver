@@ -25,6 +25,7 @@ build_docker_image: &build_docker_image
       docker-compose build dev_weaver
       [ ! -z $TRAVIS_TAG ] && docker tag weaver_dev_weaver:$DOCKER_LATEST gojektech/weaver:$TRAVIS_TAG
       [ ! -z $TRAVIS_TAG ] && docker tag gojektech/weaver:$TRAVIS_TAG gojektech/weaver:$DOCKER_LATEST
+      [ ! -z $DOCKER_PASSWORD ] && echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
       docker images
 
 services:
@@ -37,7 +38,6 @@ stages:
 
 # travis is stupid to do its own custom install and script things
 # This is the only way to skip them from running
-before_script: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 install: echo "Skip global installing..."
 script: echo "Skip global script..."
 
