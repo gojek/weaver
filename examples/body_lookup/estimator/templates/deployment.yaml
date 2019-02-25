@@ -1,0 +1,48 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+name: {{ template "estimator.fullname" . }}
+metadata:
+  name: {{ template "estimator.fullname" . }}
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    app.kubernetes.io/name: {{ template "estimator.name" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      {{- if .Values.podAnnotations }}
+      # Allows custom annotations to be specified
+      annotations:
+        {{- toYaml .Values.podAnnotations | indent 8 }}
+      {{- end }}
+      labels:
+        app.kubernetes.io/name: {{ template "estimator.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ template "estimator.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.containerPort }}
+              protocol: TCP
+          env:          
+            - name: "MAX_AMOUNT"
+              value: {{ .Values.env.maxAmount | quote }} 
+            - name: "MIN_AMOUNT"
+              value: {{ .Values.env.minAmount | quote }}
+            - name: "CURRENCY"
+              value: {{ .Values.env.currency | quote }}
+          {{- if .Values.resources }}
+          resources:
+            # Minikube when high resource requests are specified by default.
+            {{- toYaml .Values.resources | indent 12 }}
+          {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector:
+        # Node selectors can be important on mixed Windows/Linux clusters.
+        {{- toYaml .Values.nodeSelector | indent 8 }}
+      {{- end }}

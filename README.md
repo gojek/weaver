@@ -63,6 +63,14 @@ The various sharding strategies supported by weaver are:
 - Prefix lookup
 - S2 based
 
+## Deploying to Kubernets
+
+Currently we support deploying to kubernetes officially. You can check the doc [here](deployment/weaver)
+
+## Examples
+
+We have examples defined to deploy it to kubernetes and using acls. Please checkout out [examples](examples/body_lookup)
+
 ## Configuration
 
 ### Defining ACL's

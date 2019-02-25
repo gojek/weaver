@@ -1,0 +1,19 @@
+{
+  "id": "estimator",
+  "criterion" : "Method(`POST`) && Path(`/estimate`)",
+  "endpoint" : {
+    "shard_expr": ".currency",
+    "matcher": "body",
+    "shard_func": "lookup",
+    "shard_config": {
+      "IDR": {
+        "backend_name": "indonesia-cluster",
+        "backend":"http://indonesia-cluster-estimator"
+      },
+      "SGD": {
+        "backend_name": "singapore-cluster",
+        "backend":"http://singapore-cluster-estimator"
+      }
+    }
+  }
+}
