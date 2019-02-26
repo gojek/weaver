@@ -41,7 +41,7 @@ services:
   dev_weaver:
     build:
       context: .
-      target: builder
+      target: base
     command: make test
     hostname: dev-weaver
     depends_on:
