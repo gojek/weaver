@@ -47,6 +47,20 @@ func (routeLoader *RouteLoader) PutACL(acl *weaver.ACL) (ACLKey, error) {
 	return key, nil
 }
 
+func (routeLoader *RouteLoader) ListAll() ([]ACLKey, error) {
+	keysAPI, key := initEtcd(routeLoader)
+	resp, err := keysAPI.Get(context.Background(), key, nil)
+	if err != nil {
+		return nil, fmt.Errorf("fail to LIST %s with %s", key, err)
+	}
+	acls := []ACLKey{}
+	for _, n := range resp.Node.Nodes {
+		acls = append(acls, GenACLKey(n.Key))
+		fmt.Printf("Key: %q, Value: %q\n", n.Key, n.Value)
+	}
+	return acls, nil
+}
+
 // GetACL - Fetches an ACL given an ACLKey
 func (routeLoader *RouteLoader) GetACL(key ACLKey) (*weaver.ACL, error) {
 	res, err := etcd.NewKeysAPI(routeLoader.etcdClient).Get(context.Background(), string(key), nil)
@@ -81,8 +95,8 @@ func (routeLoader *RouteLoader) DelACL(key ACLKey) error {
 }
 
 func (routeLoader *RouteLoader) WatchRoutes(ctx context.Context, upsertRouteFunc server.UpsertRouteFunc, deleteRouteFunc server.DeleteRouteFunc) {
-	etc, key := initEtcd(routeLoader)
-	watcher := etc.Watcher(key, &etcd.WatcherOptions{Recursive: true})
+	keysAPI, key := initEtcd(routeLoader)
+	watcher := keysAPI.Watcher(key, &etcd.WatcherOptions{Recursive: true})
 
 	logger.Infof("starting etcd watcher on %s", key)
 	for {
@@ -130,12 +144,12 @@ func (routeLoader *RouteLoader) WatchRoutes(ctx context.Context, upsertRouteFunc
 
 func (routeLoader *RouteLoader) BootstrapRoutes(ctx context.Context, upsertRouteFunc server.UpsertRouteFunc) error {
 	// TODO: Consider error scenarios and return an error when it makes sense
-	etc, key := initEtcd(routeLoader)
+	keysAPI, key := initEtcd(routeLoader)
 	logger.Infof("bootstrapping router using etcd on %s", key)
-	res, err := etc.Get(ctx, key, nil)
+	res, err := keysAPI.Get(ctx, key, nil)
 	if err != nil {
 		logger.Infof("creating router namespace on etcd using %s", key)
-		_, _ = etc.Set(ctx, key, "", &etcd.SetOptions{
+		_, _ = keysAPI.Set(ctx, key, "", &etcd.SetOptions{
 			Dir: true,
 		})
 	}
@@ -164,7 +178,7 @@ func (routeLoader *RouteLoader) BootstrapRoutes(ctx context.Context, upsertRoute
 
 func initEtcd(routeLoader *RouteLoader) (etcd.KeysAPI, string) {
 	key := fmt.Sprintf("/%s/acls/", routeLoader.namespace)
-	etc := etcd.NewKeysAPI(routeLoader.etcdClient)
+	keysAPI := etcd.NewKeysAPI(routeLoader.etcdClient)
 
-	return etc, key
+	return keysAPI, key
 }
