@@ -29,9 +29,86 @@ func main() {
 			Description: "Start weaver server",
 			Action:      startWeaver,
 		},
+		{
+			Name:        "acls",
+			Aliases:     []string{"a"},
+			Description: "List, Create, Delete, Update ACLs",
+			Usage:       "Perform list, create, update, delete acls",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:   "etcd-host, etcd",
+					Value:  "http://localhost:2379",
+					Usage:  "Host address of ETCD",
+					EnvVar: "ETCD_ENDPOINTS",
+				},
+				cli.StringFlag{
+					Name:   "namespace, ns",
+					Value:  "weaver",
+					Usage:  "Namespace of Weaver ACLS",
+					EnvVar: "ETCD_KEY_PREFIX",
+				},
+			},
+			Subcommands: []cli.Command{
+				{
+					Name:    "list",
+					Usage:   "List ACLS",
+					Aliases: []string{"l"},
+					Action: func(c *cli.Context) error {
+						setupEnv(c)
+						config.Load()
+						rl, err := etcd.NewRouteLoader()
+						if err != nil {
+							return err
+						}
+						acls, err := rl.ListAll()
+						if err != nil {
+							return err
+						}
+						fmt.Println(acls)
+						return nil
+					},
+				},
+				{
+					Name:    "create",
+					Usage:   "Create ACL",
+					Aliases: []string{"c"},
+					Action: func(c *cli.Context) error {
+						setupEnv(c)
+						fmt.Println("new task template: ", c.Args().First())
+						return nil
+					},
+				},
+				{
+					Name:    "update",
+					Usage:   "Update ACL",
+					Aliases: []string{"u"},
+					Action: func(c *cli.Context) error {
+						setupEnv(c)
+						fmt.Println("new task template: ", c.Args().First())
+						return nil
+					},
+				},
+				{
+					Name:    "delete",
+					Usage:   "Delete ACL",
+					Aliases: []string{"d"},
+					Action: func(c *cli.Context) error {
+						setupEnv(c)
+						fmt.Println("new task template: ", c.Args().First())
+						return nil
+					},
+				},
+			},
+		},
 	}
 
 	app.Run(os.Args)
+}
+
+func setupEnv(c *cli.Context) {
+	os.Setenv("ETCD_ENDPOINTS", c.GlobalString("etcd-host"))
+	os.Setenv("ETCD_KEY_PREFIX", c.GlobalString("namespace"))
+	config.Load()
 }
 
 func startWeaver(_ *cli.Context) error {
