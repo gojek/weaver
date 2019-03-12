@@ -4,7 +4,7 @@ In this example, will deploy etcd and weaver to kubernetes and apply a simple et
 
 ### Setup
 ```
-# To kubernets cluster in local and set current context
+# To kubernetes cluster in local and set current context
 minikube start
 minikube status # verify it is up and running
 
@@ -17,29 +17,29 @@ helm init
 
 ### Deploying weaver
 
-Now we have running kubernets cluster in local. Let's deploy weaver and etcd in kubernets to play with routes.
+Now we have running kubernetes cluster in local. Let's deploy weaver and etcd in kubernetes to play with routes.
 
 1. Clone the repo
 2. On root folder of the project, run the following commands
 
 ```sh
-# Connect to kubernets docker image
+# Connect to kubernetes docker image
 eval $(minikube docker-env)
 
 # Build docker weaver image
 docker build . -t weaver:stable
 
-# Deploy weaver to kubernets
+# Deploy weaver to kubernetes
 helm upgrade --debug --install proxy-cluster ./deployment/weaver --set service.type=NodePort -f ./deployment/weaver/values-env.yaml
 ```
 
 We are setting service type as NodePort so that we can access it from local machine.
 
-We have deployed weaver successfully to kubernets under release name , you can check the same in dashboard.
+We have deployed weaver successfully to kubernetes under release name , you can check the same in dashboard.
 
 ### Deploying simple service
 
-Now we have to deploy simple service to kubernets and shard request using weaver.
+Now we have to deploy simple service to kubernetes and shard request using weaver.
 Navigate to examples/body_lookup/ and run the following commands.
 
 1. Build docker image for estimate service
