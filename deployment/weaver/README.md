@@ -10,7 +10,7 @@ By default, helm install will deploy weaver with etcd. But you can disable deplo
 helm upgrade --debug --install proxy-cluster ./deployment/weaver -f ./deployment/weaver/values-env.yaml
 ```
 
-This will deploy weaver with env values specified in the values-env.yaml file. In case if you want to expose weaver to outside kubernets you can use NodePort to do that. 
+This will deploy weaver with env values specified in the values-env.yaml file. In case if you want to expose weaver to outside kubernetes you can use NodePort to do that. 
 
 ```sh
 helm upgrade --debug --install proxy-cluster ./deployment/weaver --set service.type=NodePort -f ./deployment/weaver/values-env.yaml

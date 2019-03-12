@@ -63,7 +63,7 @@ The various sharding strategies supported by weaver are:
 - Prefix lookup
 - S2 based
 
-## Deploying to Kubernets
+## Deploying to Kubernetes
 
 Currently we support deploying to kubernetes officially. You can check the doc [here](deployment/weaver)
 
