@@ -21,6 +21,7 @@ require (
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway v1.7.0 // indirect
 	github.com/hashicorp/hcl v0.0.0-20170217164738-630949a3c5fa // indirect
+	github.com/jedib0t/go-pretty v4.0.2+incompatible
 	github.com/jonboulle/clockwork v0.1.0 // indirect
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/magiconair/properties v0.0.0-20170113111004-b3b15ef068fd // indirect

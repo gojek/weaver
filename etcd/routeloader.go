@@ -47,16 +47,24 @@ func (routeLoader *RouteLoader) PutACL(acl *weaver.ACL) (ACLKey, error) {
 	return key, nil
 }
 
-func (routeLoader *RouteLoader) ListAll() ([]ACLKey, error) {
+func (routeLoader *RouteLoader) ListAll() ([]*weaver.ACL, error) {
 	keysAPI, key := initEtcd(routeLoader)
-	resp, err := keysAPI.Get(context.Background(), key, nil)
+	res, err := keysAPI.Get(context.Background(), key, nil)
 	if err != nil {
 		return nil, fmt.Errorf("fail to LIST %s with %s", key, err)
 	}
-	acls := []ACLKey{}
-	for _, n := range resp.Node.Nodes {
-		acls = append(acls, GenACLKey(n.Key))
-		fmt.Printf("Key: %q, Value: %q\n", n.Key, n.Value)
+	acls := []*weaver.ACL{}
+	sort.Sort(res.Node.Nodes)
+	for _, nd := range res.Node.Nodes {
+		logger.Debugf("fetching node key %s", nd.Key)
+		aclKey := GenACLKey(nd.Key)
+		acl, err := routeLoader.GetACL(aclKey)
+		if err != nil {
+			logger.Errorf("error in fetching %s: %v", nd.Key, err)
+		} else {
+			acls = append(acls, acl)
+
+		}
 	}
 	return acls, nil
 }
