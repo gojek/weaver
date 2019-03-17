@@ -1,11 +1,16 @@
 package cli
 
 import (
-	baseCli "github.com/urfave/cli"
+	baseCli "gopkg.in/urfave/cli.v1"
 )
 
 type Context struct {
 	*baseCli.Context
+}
+
+type CLIHandler interface {
+	GetCommand() *baseCli.Command
+	Exec(c *Context) error
 }
 
 func NewApp() *baseCli.App {
