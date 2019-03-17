@@ -12,7 +12,6 @@ func main() {
 	app.Version = fmt.Sprintf("%s built on %s (commit: %s)", Version, BuildDate, Commit)
 	app.Description = "An Advanced HTTP Reverse Proxy with Dynamic Sharding Strategies"
 	app.Usage = "Multi Utility CLI Tool"
-	app.Commands = cli.GetCommands()
 	app.Run(os.Args)
 }
 
