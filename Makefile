@@ -9,7 +9,7 @@ COMMIT_HASH=$(shell git rev-parse --verify head | cut -c-1-8)
 BUILD_DATE=$(shell date +%Y-%m-%dT%H:%M:%S%z)
 
 setup:
-	GO111MODULE=on go get -u github.com/golang/lint/golint
+	GO111MODULE=on go get -u golang.org/x/lint/golint
 	GO111MODULE=on go get github.com/mattn/goveralls
 
 compile:
