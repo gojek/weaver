@@ -1,9 +1,9 @@
 version: '3.4'
 
 services:
-  dev_weaver_statsd:
+  dev_statsd:
     image: gojektech/statsd:0.7.2
-    hostname: dev-weaver-statsd
+    hostname: dev-statsd
     ports:
       - "18124:8124"
       - "18125:8125"
@@ -11,9 +11,9 @@ services:
     networks:
       - weaver_net
 
-  dev_weaver_etcd:
+  dev_etcd:
     image: quay.io/coreos/etcd:v2.3.8
-    hostname: dev-weaver-etcd
+    hostname: dev-etcd
     entrypoint: ["/etcd"]
     command: [
         "-name",
@@ -41,36 +41,17 @@ services:
   dev_weaver:
     build:
       context: .
-      target: base
-    command: make test
+      target: weaver_base
     hostname: dev-weaver
     depends_on:
-      - dev_weaver_etcd
-      - dev_weaver_statsd
+      - dev_etcd
+      - dev_statsd
     environment:
       STATD_PORT: 8125
-      STATSD_HOST: dev_weaver_statsd
-      ETCD_ENDPOINTS: "http://dev_weaver_etcd:2379"
+      STATSD_HOST: dev_statsd
+      ETCD_ENDPOINTS: "http://dev_etcd:2379"
     stdin_open: true
     tty: true
-    networks:
-      - weaver_net
-
-  dev_weaver_server:
-    build: .
-    command:
-      - cp `which weaver` /weaver/out/weaver-server
-      - make run-server
-    hostname: dev-weaver-server
-    depends_on:
-      - dev_weaver_etcd
-      - dev_weaver_statsd
-    environment:
-      STATD_PORT: 8125
-      STATSD_HOST: dev_weaver_statsd
-      ETCD_ENDPOINTS: "http://dev_weaver_etcd:2379"
-    ports:
-     - "8081:8081"
     networks:
       - weaver_net
 
