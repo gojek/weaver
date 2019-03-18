@@ -55,21 +55,18 @@ clean:
 docker-clean:
 	docker-compose down
 
-docker-spec: docker-clean docker-up
+docker-spec: docker-clean
 	docker-compose build
-	docker-compose run dev_weaver
+	docker-compose run --entrypoint "make test" dev_weaver
 
-server-start:
-	docker-compose run dev_weaver_server
+docker-server:
+	docker-compose run --entrypoint "make local-server" dev_weaver
 
 docker-up:
 	docker-compose up -d
 
-run-server: compile
-	$(APP_EXECUTABLE) server
-
-start: docker-up compile
-	$(APP_EXECUTABLE) server
+local-server: compile
+	$(APP_EXECUTABLE) start
 
 coverage:
 	goveralls -service=travis-ci
