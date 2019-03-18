@@ -16,6 +16,12 @@ func TestParentCommandInitialization(t *testing.T) {
 	assert.NotNil(t, ts.cmd)
 }
 
+func TestParentCommandShouldRegisterCommand(t *testing.T) {
+	ts := setupTestParentCommand()
+	cmd := cli.NewDefaultCommand("test", "usage", "description", func(c *cli.Context) error { return nil })
+	assert.NoError(t, ts.cmd.RegisterCommand(cmd))
+}
+
 func setupTestParentCommand() *testParentCommandSetup {
 	ts := &testParentCommandSetup{name: "parent", usage: "parent usage", description: "parent description"}
 	ts.cmd = cli.NewParentCommand(ts.name, ts.usage, ts.description)
