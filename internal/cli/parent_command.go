@@ -1,6 +1,8 @@
 package cli
 
-import ()
+import (
+	"fmt"
+)
 
 type ParentCommand struct {
 	cmdRegistery map[string]*Command
@@ -8,7 +10,12 @@ type ParentCommand struct {
 }
 
 func (pc *ParentCommand) RegisterCommand(cmd *Command) error {
-	pc.cmdRegistery[cmd.CliHandler()] = cmd
+	cliHandler := cmd.CliHandler()
+	if _, cmdFound := pc.cmdRegistery[cliHandler]; cmdFound {
+		return fmt.Errorf("Another Command Regsitered for Cli Handler: %s", cliHandler)
+	}
+
+	pc.cmdRegistery[cliHandler] = cmd
 	return nil
 }
 
