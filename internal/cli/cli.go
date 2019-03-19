@@ -8,11 +8,6 @@ type Context struct {
 	*baseCli.Context
 }
 
-type CLIHandler interface {
-	GetCommand() *baseCli.Command
-	Exec(c *Context) error
-}
-
 func NewApp() *baseCli.App {
 	app := baseCli.NewApp()
 	app.Flags = []baseCli.Flag{
