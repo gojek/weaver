@@ -31,7 +31,7 @@ spec:
               protocol: TCP
           {{- if .Values.weaver.env }}
           env:
-            {{ toYaml .Values.weaver.env | indent 12}}
+            {{- toYaml .Values.weaver.env | nindent 12 }}
           {{- end }}
           {{- if .Values.resources }}
           resources:

@@ -29,9 +29,9 @@ spec:
             - name: http
               containerPort: {{ .Values.service.containerPort }}
               protocol: TCP
-          env:          
+          env:
             - name: "MAX_AMOUNT"
-              value: {{ .Values.env.maxAmount | quote }} 
+              value: {{ .Values.env.maxAmount | quote }}
             - name: "MIN_AMOUNT"
               value: {{ .Values.env.minAmount | quote }}
             - name: "CURRENCY"
