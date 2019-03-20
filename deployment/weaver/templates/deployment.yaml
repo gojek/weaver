@@ -38,6 +38,15 @@ spec:
             # Minikube when high resource requests are specified by default.
             {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
+      {{- if .Values.etcd.enabled }}
+      initContainers:
+        - name: init-etcd-dns
+          image: busybox
+          command: ['sh', '-c', 'until nslookup etcd; do echo waiting for etcd dns to be resolving; sleep 1; done;']
+        - name: init-etcd-health
+          image: busybox
+          command: ['sh', '-c', 'until wget --spider etcd:2379/health; do echo waiting for etcd to be up; sleep 1; done;']
+      {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector:
         # Node selectors can be important on mixed Windows/Linux clusters.

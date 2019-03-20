@@ -20,4 +20,4 @@ FROM alpine:latest
 
 COPY --from=weaver_base /weaver/out/weaver-server /usr/local/bin/weaver
 
-ENTRYPOINT ["weaver", "server"]
+ENTRYPOINT ["weaver", "start"]
