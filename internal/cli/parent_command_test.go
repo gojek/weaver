@@ -10,7 +10,7 @@ import (
 
 type testParentCommandSetup struct {
 	name, usage, description string
-	cmd                      *cli.ParentCommand
+	cmd                      *cli.Command
 }
 
 func TestParentCommandInitialization(t *testing.T) {
