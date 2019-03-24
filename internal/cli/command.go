@@ -10,6 +10,8 @@ type cmdAction func(c *Context) error
 type Command struct {
 	name            string
 	action          cmdAction
+	usage           string
+	description     string
 	subCommands     Commands
 	isParentCommand bool
 }
@@ -52,13 +54,13 @@ func (pc *Command) RegisterCommand(cmd *Command) error {
 }
 
 func NewDefaultCommand(name, usage, description string, action cmdAction) *Command {
-	return &Command{name: name, action: action}
+	return &Command{name: name, usage: usage, description: description, action: action}
 }
 
 func NewParentCommand(name, usage, description string) *Command {
-	return &Command{name: name, subCommands: Commands{}, isParentCommand: true, action: func(c *Context) error { return nil }}
+	return &Command{name: name, usage: usage, description: description, subCommands: Commands{}, isParentCommand: true, action: func(c *Context) error { return nil }}
 }
 
 func NewParentCommandWithAction(name, usage, description string, action cmdAction) *Command {
-	return &Command{name: name, subCommands: Commands{}, isParentCommand: true, action: action}
+	return &Command{name: name, usage: usage, description: description, subCommands: Commands{}, isParentCommand: true, action: action}
 }

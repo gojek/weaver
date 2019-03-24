@@ -2,8 +2,11 @@ package cli
 
 import (
 	"fmt"
+	"github.com/gojektech/weaver/config"
 	"github.com/gojektech/weaver/etcd"
+	"github.com/gojektech/weaver/pkg/logger"
 	baseCli "gopkg.in/urfave/cli.v1"
+	"os"
 )
 
 var registeredCommands = Commands{}
@@ -22,6 +25,30 @@ func RegisterAsBaseCommand(cmd *Command) error {
 	}
 	registeredCommands = append(registeredCommands, cmd)
 	return nil
+}
+
+func GetBaseCommands() []*baseCli.Command {
+	baseCliCommands := []*baseCli.Command{}
+	for _, eachCmd := range registeredCommands {
+		baseCmd := &baseCli.Command{
+			Name:        eachCmd.name,
+			Usage:       eachCmd.usage,
+			Description: eachCmd.description,
+			Action: func(ctx *baseCli.Context) error {
+				c := &Context{Context: ctx}
+				setup(c)
+				return eachCmd.Exec(c)
+			},
+		}
+		baseCliCommands = append(baseCliCommands, baseCmd)
+	}
+	return baseCliCommands
+}
+
+func setup(c *Context) {
+	os.Setenv("LOGGER_LEVEL", c.GlobalString("verbose"))
+	config.Load()
+	logger.SetupLogger()
 }
 
 func NewApp() *baseCli.App {

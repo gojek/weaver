@@ -26,6 +26,16 @@ func TestAppShouldReturnErrorOnDuplicateRegistration(t *testing.T) {
 	assert.Equal(t, err, fmt.Errorf("Another Command Regsitered for Cli Handler: %s", ts.name))
 }
 
+func TestCliGetCommandsShouldGiveCobraCommands(t *testing.T) {
+	ts := setupTestApp()
+	baseCliCommands := cli.GetBaseCommands()
+
+	assert.Equal(t, len(baseCliCommands), 1)
+	assert.Equal(t, baseCliCommands[0].Name, ts.name)
+	assert.Equal(t, baseCliCommands[0].Usage, ts.usage)
+	assert.Equal(t, baseCliCommands[0].Description, ts.description)
+}
+
 func setupTestApp() *testAppSetup {
 	setup := &testAppSetup{name: "test", usage: "usage", description: "description"}
 	action := func(c *cli.Context) error { return nil }
