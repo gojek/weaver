@@ -18,6 +18,11 @@ func TestParentCommandInitialization(t *testing.T) {
 	assert.NotNil(t, ts.cmd)
 }
 
+func TestParentCommandShouldBeAbleToInitializeWithAction(t *testing.T) {
+	ts := setupTestParentCommandWithAction()
+	assert.NotNil(t, ts.cmd)
+}
+
 func TestParentCommandShouldRegisterCommand(t *testing.T) {
 	ts := setupTestParentCommand()
 	cmd := cli.NewDefaultCommand("test", "usage", "description", func(c *cli.Context) error { return nil })
@@ -42,6 +47,7 @@ func TestParentCommandShouldExecuteSubCommand(t *testing.T) {
 	cmdTwo := cli.NewDefaultCommand("test-two", "usage", "description", func(c *cli.Context) error { isCmdTwoCalled = true; return nil })
 	errFromCmdOne := ts.cmd.RegisterCommand(cmdOne)
 	errFromCmdTwo := ts.cmd.RegisterCommand(cmdTwo)
+
 	ctx := &cli.Context{Context: &baseCli.Context{Command: baseCli.Command{Name: "test-one"}}}
 	ts.cmd.Exec(ctx)
 
@@ -51,8 +57,28 @@ func TestParentCommandShouldExecuteSubCommand(t *testing.T) {
 	assert.False(t, isCmdTwoCalled)
 }
 
+func TestParentCommandBeforeActionShouldBeCalledFirst(t *testing.T) {
+	ts := setupTestParentCommandWithAction()
+	orderOfExecution := []string{}
+	ts.cmd = cli.NewParentCommandWithAction(ts.name, ts.usage, ts.description, func(c *cli.Context) error { orderOfExecution = append(orderOfExecution, "parent"); return nil })
+	cmdOne := cli.NewDefaultCommand("test-one", "usage", "description", func(c *cli.Context) error { orderOfExecution = append(orderOfExecution, "child"); return nil })
+	errFromCmdOne := ts.cmd.RegisterCommand(cmdOne)
+
+	ctx := &cli.Context{Context: &baseCli.Context{Command: baseCli.Command{Name: "test-one"}}}
+	ts.cmd.Exec(ctx)
+
+	assert.NoError(t, errFromCmdOne)
+	assert.Equal(t, orderOfExecution, []string{"parent", "child"})
+}
+
 func setupTestParentCommand() *testParentCommandSetup {
 	ts := &testParentCommandSetup{name: "parent", usage: "parent usage", description: "parent description"}
 	ts.cmd = cli.NewParentCommand(ts.name, ts.usage, ts.description)
+	return ts
+}
+
+func setupTestParentCommandWithAction() *testParentCommandSetup {
+	ts := &testParentCommandSetup{name: "parent", usage: "parent usage", description: "parent description"}
+	ts.cmd = cli.NewParentCommandWithAction(ts.name, ts.usage, ts.description, func(c *cli.Context) error { return nil })
 	return ts
 }

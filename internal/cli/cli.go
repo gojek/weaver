@@ -1,10 +1,12 @@
 package cli
 
 import (
+	"github.com/gojektech/weaver/etcd"
 	baseCli "gopkg.in/urfave/cli.v1"
 )
 
 type Context struct {
+	RouteLoader *etcd.RouteLoader
 	*baseCli.Context
 }
 

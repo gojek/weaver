@@ -8,9 +8,10 @@ import (
 type cmdAction func(c *Context) error
 
 type Command struct {
-	name        string
-	action      cmdAction
-	subCommands Commands
+	name            string
+	action          cmdAction
+	subCommands     Commands
+	isParentCommand bool
 }
 
 type Commands []*Command
@@ -20,9 +21,11 @@ func (cmd *Command) CliHandler() string {
 }
 
 func (cmd *Command) Exec(c *Context) error {
-	if cmd.action != nil {
+	if !cmd.isParentCommand {
 		return cmd.action(c)
 	} else {
+		cmd.action(c)
+
 		cliHandler := strings.Split(c.Command.FullName(), " ")[0]
 		for _, eachCmd := range cmd.subCommands {
 			if eachCmd.CliHandler() == cliHandler {
@@ -34,7 +37,7 @@ func (cmd *Command) Exec(c *Context) error {
 }
 
 func (pc *Command) RegisterCommand(cmd *Command) error {
-	if pc.action == nil {
+	if pc.isParentCommand {
 		cliHandler := cmd.CliHandler()
 		for _, eachCmd := range pc.subCommands {
 			if eachCmd.CliHandler() == cliHandler {
@@ -53,5 +56,9 @@ func NewDefaultCommand(name, usage, description string, action cmdAction) *Comma
 }
 
 func NewParentCommand(name, usage, description string) *Command {
-	return &Command{name: name, subCommands: []*Command{}}
+	return &Command{name: name, subCommands: []*Command{}, isParentCommand: true, action: func(c *Context) error { return nil }}
+}
+
+func NewParentCommandWithAction(name, usage, description string, action cmdAction) *Command {
+	return &Command{name: name, subCommands: []*Command{}, isParentCommand: true, action: action}
 }
