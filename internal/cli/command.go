@@ -56,9 +56,9 @@ func NewDefaultCommand(name, usage, description string, action cmdAction) *Comma
 }
 
 func NewParentCommand(name, usage, description string) *Command {
-	return &Command{name: name, subCommands: []*Command{}, isParentCommand: true, action: func(c *Context) error { return nil }}
+	return &Command{name: name, subCommands: Commands{}, isParentCommand: true, action: func(c *Context) error { return nil }}
 }
 
 func NewParentCommandWithAction(name, usage, description string, action cmdAction) *Command {
-	return &Command{name: name, subCommands: []*Command{}, isParentCommand: true, action: action}
+	return &Command{name: name, subCommands: Commands{}, isParentCommand: true, action: action}
 }
