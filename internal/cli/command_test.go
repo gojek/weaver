@@ -28,6 +28,12 @@ func TestCommandShouldExecuteSpecifiedAction(t *testing.T) {
 	assert.True(t, ts.isCalled)
 }
 
+func TestShouldBeAbleToSetFlags(t *testing.T) {
+	ts := setupTestCommand()
+	flag := cli.NewStringFlag("test", "value", "usage", "env")
+	assert.NotPanics(t, func() { ts.cmd.SetFlag(flag) }, "Setting a flag panics")
+}
+
 func setupTestCommand() *testCommandSetup {
 	setup := &testCommandSetup{name: "test", usage: "usage", description: "description", isCalled: false}
 	action := func(c *cli.Context) error { setup.isCalled = true; return nil }

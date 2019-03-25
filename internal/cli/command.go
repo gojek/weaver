@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	baseCli "gopkg.in/urfave/cli.v1"
 	"strings"
 )
 
@@ -13,6 +14,7 @@ type Command struct {
 	usage           string
 	description     string
 	subCommands     Commands
+	flags           []baseCli.Flag
 	isParentCommand bool
 }
 
@@ -20,6 +22,11 @@ type Commands []*Command
 
 func (cmd *Command) CliHandler() string {
 	return cmd.name
+}
+
+func (cmd *Command) SetFlag(flag baseCli.Flag) error {
+	cmd.flags = append(cmd.flags, flag)
+	return nil
 }
 
 func (cmd *Command) Exec(c *Context) error {
