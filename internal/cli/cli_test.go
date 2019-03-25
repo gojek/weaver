@@ -2,7 +2,9 @@ package cli_test
 
 import (
 	"fmt"
+	"github.com/gojektech/weaver/config"
 	"github.com/gojektech/weaver/internal/cli"
+	"github.com/gojektech/weaver/pkg/logger"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -34,6 +36,22 @@ func TestCliGetCommandsShouldGiveCobraCommands(t *testing.T) {
 	assert.Equal(t, baseCliCommands[0].Name, ts.name)
 	assert.Equal(t, baseCliCommands[0].Usage, ts.usage)
 	assert.Equal(t, baseCliCommands[0].Description, ts.description)
+}
+
+func TestCliGetCommandsExecutionSHouldSetupConfigAndLogger(t *testing.T) {
+	ts := setupTestApp()
+	err := cli.RegisterAsBaseCommand(ts.cmd)
+	assert.Error(t, err)
+
+	baseCliCommands := cli.GetBaseCommands()
+	app := cli.NewApp()
+	app.Commands = baseCliCommands
+	app.Run([]string{"binary", "--verbose", "debug", ts.name})
+
+	// config is supposed to have logger level set
+	// If it setup logger, logging shouldn't panic
+	assert.NotPanics(t, func() { logger.Info("Should not panic if logger is setup") })
+	assert.Equal(t, config.LogLevel(), "debug")
 }
 
 func setupTestApp() *testAppSetup {

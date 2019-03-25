@@ -27,10 +27,10 @@ func RegisterAsBaseCommand(cmd *Command) error {
 	return nil
 }
 
-func GetBaseCommands() []*baseCli.Command {
-	baseCliCommands := []*baseCli.Command{}
+func GetBaseCommands() []baseCli.Command {
+	baseCliCommands := []baseCli.Command{}
 	for _, eachCmd := range registeredCommands {
-		baseCmd := &baseCli.Command{
+		baseCmd := baseCli.Command{
 			Name:        eachCmd.name,
 			Usage:       eachCmd.usage,
 			Description: eachCmd.description,
