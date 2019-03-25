@@ -34,6 +34,7 @@ func GetBaseCommands() []baseCli.Command {
 			Name:        eachCmd.name,
 			Usage:       eachCmd.usage,
 			Description: eachCmd.description,
+			Flags:       eachCmd.flags,
 			Action: func(ctx *baseCli.Context) error {
 				c := &Context{Context: ctx}
 				setup(c)
@@ -54,12 +55,7 @@ func setup(c *Context) {
 func NewApp() *baseCli.App {
 	app := baseCli.NewApp()
 	app.Flags = []baseCli.Flag{
-		baseCli.StringFlag{
-			Name:   "verbose",
-			Value:  "Error",
-			Usage:  "Verbosity of log level, ex: debug, info, warn, error, fatal, panic",
-			EnvVar: "LOGGER_LEVEL",
-		},
+		NewStringFlag("verbose", "Error", "Verbosity of log level, ex: debug, info, warn, error, fatal, panic", "LOGGER_LEVEL"),
 	}
 	return app
 }
