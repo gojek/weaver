@@ -69,6 +69,30 @@ func TestAppRunWithOSArgsShouldExecuteBaseCommandAction(t *testing.T) {
 	assert.True(t, isCmdActionExecuted)
 }
 
+func TestAppRunWithOSArgsShouldExecuteParentsSubCommand(t *testing.T) {
+	isParentActionExecuted := false
+	isCmdActionExecuted := false
+	ts := setupTestApp()
+	parentCmd := cli.NewParentCommandWithAction("parent", "parent-usage", "parent-desc", func(c *cli.Context) error { isParentActionExecuted = true; return nil })
+
+	ts.name = "exec-test-sub-command"
+	ts.cmd = cli.NewDefaultCommand(ts.name, ts.usage, ts.description, func(c *cli.Context) error { isCmdActionExecuted = true; return nil })
+
+	errFromBaseCommandRegistration := cli.RegisterAsBaseCommand(parentCmd)
+	assert.NoError(t, errFromBaseCommandRegistration)
+
+	errFromSubCommandRegistration := parentCmd.RegisterCommand(ts.cmd)
+	assert.NoError(t, errFromSubCommandRegistration)
+
+	baseCliCommands := cli.GetBaseCommands()
+	app := cli.NewApp()
+	app.Commands = baseCliCommands
+	app.Run([]string{"binary", "--verbose", "debug", "parent", ts.name})
+
+	assert.True(t, isParentActionExecuted)
+	assert.True(t, isCmdActionExecuted)
+}
+
 func setupTestApp() *testAppSetup {
 	setup := &testAppSetup{name: "test", usage: "usage", description: "description"}
 	action := func(c *cli.Context) error { return nil }
