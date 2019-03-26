@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/gojektech/weaver/internal/cli"
+	_ "github.com/gojektech/weaver/internal/commands"
+	_ "github.com/gojektech/weaver/internal/commands/server"
 	"os"
 )
 
