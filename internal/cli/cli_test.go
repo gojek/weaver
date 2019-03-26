@@ -24,11 +24,12 @@ func TestAppShouldReturnErrorOnDuplicateRegistration(t *testing.T) {
 	// This will throw error as previous command is also registered with same cli handler
 	ts := setupTestApp()
 	err := cli.RegisterAsBaseCommand(ts.cmd)
+
 	assert.Error(t, err)
 	assert.Equal(t, err, fmt.Errorf("Another Command Regsitered for Cli Handler: %s", ts.name))
 }
 
-func TestCliGetCommandsShouldGiveCobraCommands(t *testing.T) {
+func TestCliGetCommandsShouldGiveBaseCommands(t *testing.T) {
 	ts := setupTestApp()
 	baseCliCommands := cli.GetBaseCommands()
 
@@ -40,8 +41,6 @@ func TestCliGetCommandsShouldGiveCobraCommands(t *testing.T) {
 
 func TestCliGetCommandsExecutionSHouldSetupConfigAndLogger(t *testing.T) {
 	ts := setupTestApp()
-	err := cli.RegisterAsBaseCommand(ts.cmd)
-	assert.Error(t, err)
 
 	baseCliCommands := cli.GetBaseCommands()
 	app := cli.NewApp()
@@ -52,6 +51,22 @@ func TestCliGetCommandsExecutionSHouldSetupConfigAndLogger(t *testing.T) {
 	// If it setup logger, logging shouldn't panic
 	assert.NotPanics(t, func() { logger.Info("Should not panic if logger is setup") })
 	assert.Equal(t, config.LogLevel(), "debug")
+}
+
+func TestAppRunWithOSArgsShouldExecuteBaseCommandAction(t *testing.T) {
+	isCmdActionExecuted := false
+	ts := setupTestApp()
+	ts.name = "exec-test"
+	ts.cmd = cli.NewDefaultCommand(ts.name, ts.usage, ts.description, func(c *cli.Context) error { isCmdActionExecuted = true; return nil })
+	err := cli.RegisterAsBaseCommand(ts.cmd)
+	assert.NoError(t, err)
+
+	baseCliCommands := cli.GetBaseCommands()
+	app := cli.NewApp()
+	app.Commands = baseCliCommands
+	app.Run([]string{"binary", "--verbose", "debug", ts.name})
+
+	assert.True(t, isCmdActionExecuted)
 }
 
 func setupTestApp() *testAppSetup {
