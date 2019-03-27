@@ -33,20 +33,7 @@ type RouteLoader struct {
 	namespace  string
 }
 
-// PutACL - Upserts a given ACL
-func (routeLoader *RouteLoader) PutACL(acl *weaver.ACL) (ACLKey, error) {
-	key := GenKey(acl, routeLoader.namespace)
-	val, err := json.Marshal(acl)
-	if err != nil {
-		return "", err
-	}
-	_, err = etcd.NewKeysAPI(routeLoader.etcdClient).Set(context.Background(), string(key), string(val), nil)
-	if err != nil {
-		return "", fmt.Errorf("fail to PUT %s:%s with %s", key, acl, err.Error())
-	}
-	return key, nil
-}
-
+// ListAll - List all valid weaver acls
 func (routeLoader *RouteLoader) ListAll() ([]*weaver.ACL, error) {
 	keysAPI, key := initEtcd(routeLoader)
 	res, err := keysAPI.Get(context.Background(), key, nil)
@@ -67,6 +54,20 @@ func (routeLoader *RouteLoader) ListAll() ([]*weaver.ACL, error) {
 		}
 	}
 	return acls, nil
+}
+
+// PutACL - Upserts a given ACL
+func (routeLoader *RouteLoader) PutACL(acl *weaver.ACL) (ACLKey, error) {
+	key := GenKey(acl, routeLoader.namespace)
+	val, err := json.Marshal(acl)
+	if err != nil {
+		return "", err
+	}
+	_, err = etcd.NewKeysAPI(routeLoader.etcdClient).Set(context.Background(), string(key), string(val), nil)
+	if err != nil {
+		return "", fmt.Errorf("fail to PUT %s:%s with %s", key, acl, err.Error())
+	}
+	return key, nil
 }
 
 // GetACL - Fetches an ACL given an ACLKey
