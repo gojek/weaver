@@ -15,20 +15,20 @@ const (
 	serverCmdDescription = "Weaver - Run Server"
 )
 
-var weaverServerCmd = cli.NewParentCommandWithAction(serverCmdName, serverCmdName, serverCmdDescription, setupServer)
+var weaverServerCmd = cli.NewParentCommandWithAction(serverCmdName, serverCmdUsage, serverCmdDescription, setupServer)
 
 func setupServer(c *cli.Context) error {
 	os.Setenv("ETCD_ENDPOINTS", c.GlobalString("etcd-host"))
 	os.Setenv("ETCD_KEY_PREFIX", c.GlobalString("namespace"))
 	config.Load()
 	rl, err := etcd.NewRouteLoader()
-	if err == nil {
-		c.RouteLoader = rl
-		return nil
-	} else {
+
+	if err != nil {
 		logger.Fatalf("Couldn't create route loader: %s", err)
 		os.Exit(1)
 	}
+
+	c.RouteLoader = rl
 	return nil
 }
 

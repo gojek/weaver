@@ -48,9 +48,11 @@ func TestCliGetCommandsExecutionSHouldSetupConfigAndLogger(t *testing.T) {
 	app.Run([]string{"binary", "--verbose", "debug", ts.name})
 
 	// config is supposed to have logger level set
-	// If it setup logger, logging shouldn't panic
-	assert.NotPanics(t, func() { logger.Info("Should not panic if logger is setup") })
 	assert.Equal(t, config.LogLevel(), "debug")
+
+	// If it is setup logger, logging shouldn't panic
+	msg := "Should not panic if logger is setup"
+	assert.NotPanics(t, func() { logger.Info(msg) })
 }
 
 func TestAppRunWithOSArgsShouldExecuteBaseCommandAction(t *testing.T) {
