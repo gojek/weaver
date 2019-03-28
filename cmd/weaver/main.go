@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gojektech/weaver/internal/cli"
 	_ "github.com/gojektech/weaver/internal/commands"
+	_ "github.com/gojektech/weaver/internal/commands/acls"
 	_ "github.com/gojektech/weaver/internal/commands/server"
 	"os"
 )
@@ -12,6 +13,7 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "Weaver"
 	app.Version = fmt.Sprintf("%s built on %s (commit: %s)", Version, BuildDate, Commit)
+	app.Usage = "Start Server, Perform CRUD on ACLs"
 	app.Description = "An Advanced HTTP Reverse Proxy with Dynamic Sharding Strategies"
 	app.Commands = cli.GetBaseCommands()
 	app.Run(os.Args)
