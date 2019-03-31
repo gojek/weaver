@@ -20,15 +20,15 @@ func listACL(c *cli.Context) error {
 		logger.Fatalf("Error while listing acls: %s", err)
 	}
 
-	type aclListInfo struct {
+	type aclInfo struct {
 		ID        string `json:"ACL ID"`
 		Criterion string `json:"Criterion"`
 	}
 
-	formattedAcls := []aclListInfo{}
+	formattedAcls := []aclInfo{}
 
 	for _, eachACL := range acls {
-		formattedAcls = append(formattedAcls, aclListInfo{eachACL.ID, eachACL.Criterion})
+		formattedAcls = append(formattedAcls, aclInfo{eachACL.ID, eachACL.Criterion})
 	}
 
 	views.Render(formattedAcls)

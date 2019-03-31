@@ -37,7 +37,8 @@ func getBaseCommandWithActionWrapper(cmds Commands, fn cmdAction) []baseCli.Comm
 	}
 
 	baseCliCommands := []baseCli.Command{}
-	for _, eachCmd := range cmds {
+	for idx, _ := range cmds {
+		eachCmd := cmds[idx]
 		baseCmd := baseCli.Command{
 			Name:        eachCmd.name,
 			Usage:       eachCmd.usage,
@@ -74,8 +75,6 @@ func setup(c *Context) error {
 
 func NewApp() *baseCli.App {
 	app := baseCli.NewApp()
-	app.Flags = []baseCli.Flag{
-		NewStringFlag("verbose", "Error", "Verbosity of log level, ex: debug, info, warn, error, fatal, panic", "LOGGER_LEVEL"),
-	}
+	app.Flags = []baseCli.Flag{NewStringFlag("verbose", "Error", "Verbosity of log level, ex: debug, info, warn, error, fatal, panic", "LOGGER_LEVEL")}
 	return app
 }
