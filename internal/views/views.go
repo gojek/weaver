@@ -15,7 +15,7 @@ func Render(o interface{}) {
 
 	err := encoder.Encode(o)
 	if err != nil {
-		logger.Fatalf("Error marshaling outptu: %s", err)
+		logger.Fatalf("Error marshaling output: %s", err)
 		panic(err)
 	}
 	fmt.Print(string(buffer.Bytes()))

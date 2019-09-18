@@ -1,7 +1,8 @@
 package acls
 
 import (
-	"github.com/gojektech/weaver"
+	baseCli "gopkg.in/urfave/cli.v1"
+
 	"github.com/gojektech/weaver/internal/cli"
 	"github.com/gojektech/weaver/internal/views"
 	"github.com/gojektech/weaver/pkg/logger"
@@ -17,20 +18,23 @@ var aclShowCmd = cli.NewDefaultCommand(showCmdName, showCmdUsage, showCmdDescrip
 
 func showACL(c *cli.Context) error {
 	aclID := c.String("id")
+	if aclID == "" {
+		baseCli.ShowSubcommandHelp(c.Context)
+		return nil
+	}
 	acls, err := c.RouteLoader.ListAll()
 	if err != nil {
 		logger.Fatalf("Error while showing acls: %s", err)
 	}
 
-	aclToShow := []weaver.ACL{}
-
 	for _, eachACL := range acls {
 		if eachACL.ID == aclID {
-			aclToShow = append(aclToShow, *eachACL)
+			views.Render(eachACL)
+			return nil
 		}
-	}
 
-	views.Render(aclToShow)
+	}
+	logger.Fatalf("ACL with id: %s not found", aclID)
 	return nil
 }
 
