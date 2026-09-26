@@ -43,6 +43,28 @@ func TestRouteLoaderSuite(tst *testing.T) {
 	suite.Run(tst, new(RouteLoaderSuite))
 }
 
+func (es *RouteLoaderSuite) TestListAll() {
+	aclPut := &weaver.ACL{
+		ID:        "svc-01",
+		Criterion: "Method(`GET`) && Path(`/ping`)",
+		EndpointConfig: &weaver.EndpointConfig{
+			ShardFunc:   "lookup",
+			Matcher:     "path",
+			ShardExpr:   "*",
+			ShardConfig: json.RawMessage(`{}`),
+		},
+	}
+
+	key, err := es.ng.PutACL(aclPut)
+	assert.NoError(es.T(), err, "failed to PUT %s", aclPut)
+
+	aclList, err := es.ng.ListAll()
+	assert.Nil(es.T(), err, "fail to ListAll ACLs")
+
+	deepEqual(es.T(), aclPut, aclList[0])
+	assert.Nil(es.T(), es.ng.DelACL(key), "fail to DELETE %+v", aclPut)
+}
+
 func (es *RouteLoaderSuite) TestPutACL() {
 	aclPut := &weaver.ACL{
 		ID:        "svc-01",
